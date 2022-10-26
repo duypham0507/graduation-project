@@ -1,1 +1,1 @@
-# graduation-project
+# graduation-frontend
