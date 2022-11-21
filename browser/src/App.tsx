@@ -1,11 +1,11 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import { LoginComponent } from './auth/login/index';
 
 function App() {
   return (
-    <div className="App">
-      Hello
+    <div className="relative h-full w-full">
+      <LoginComponent />
     </div>
   );
 }
