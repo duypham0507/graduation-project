@@ -1,12 +1,19 @@
-import React from 'react';
-import './App.css';
-import { LoginComponent } from './auth/login/index';
-
+import React, { useState } from "react";
+import "./App.css";
+import { Switch, Route } from "react-router-dom";
+import PrivateRouter from "components/PrivateRouter";
+import { LoginComponent } from "auth/login";
 function App() {
   return (
-    <div className="relative h-full w-full">
-      <LoginComponent />
-    </div>
+    <>
+      <Switch>
+        <Route path={"/login"} exact>
+          <LoginComponent />
+        </Route>
+
+        <PrivateRouter path={"/home"} exact>adadadad</PrivateRouter>
+      </Switch>
+    </>
   );
 }
 
