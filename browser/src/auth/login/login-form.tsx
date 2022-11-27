@@ -1,20 +1,22 @@
 import { useState } from "react";
 import { Button } from "antd";
-import axios from "axios";
 import { login, LoginPayload } from "services/auth";
 import { useDispatch } from "react-redux";
+import { useHistory } from "react-router-dom";
 
 export const FormLogin = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const dispatch = useDispatch();
+  let history = useHistory();
 
-  const onSubmit = () => {
+  const onSubmit = async () => {
     let data: LoginPayload = {
       email: email,
       password: password,
     };
-    dispatch(login(data) as any);
+    let res = await dispatch(login(data) as any);
+    res && history.push('/home')
   };
   return (
     <div className="">

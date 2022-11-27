@@ -8,6 +8,15 @@ export interface LoginPayload {
   password: string;
 }
 
+export interface SignUpPayload {
+  name: string
+  email: string;
+  password: string;
+  mobile?:string;
+  info?:string;
+  avatar?:string;
+}
+
 interface SocialLogin {
   accessToken: string;
   method: AUTH_METHOD;
@@ -25,6 +34,20 @@ export const login = createAsyncThunk(
       };
     } catch (e) {
       return rejectWithValue(e);
+    }
+  }
+);
+
+export const signup = createAsyncThunk(
+  "signUp",
+  async (loginPayload: LoginPayload, { fulfillWithValue, rejectWithValue }) => {
+    try {
+      const response = await axios.post("/user/signUp", loginPayload);
+      console.log(response);
+      
+      return response
+    } catch (e) {
+      return e;
     }
   }
 );
