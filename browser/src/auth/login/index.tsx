@@ -1,4 +1,4 @@
-import { HeaderLayout } from "header/header-layout";
+import { HeaderAuthen } from "header/header-authen";
 import { useHistory } from "react-router-dom";
 import { LoginWithGoogleButton } from "./components/login-google";
 import { FormLogin } from "./login-form";
@@ -12,7 +12,7 @@ export const LoginComponent = () => {
   return (
     <div className="w-full h-full flex flex-col">
       <div className="relative z-50">
-        <HeaderLayout />
+        <HeaderAuthen />
       </div>
       <div className="w-full flex h-full flex-col scrollable-view">
         <div className="w-full flex h-full flex-row justify-center my-6 items-center">
@@ -52,7 +52,7 @@ export const LoginComponent = () => {
             </div>
             <div className="mb-6 text-center">
               <span>
-                Chưa có tài khoản? <a className="text-blue-500" onClick={() => history.push('/sign-up')}>Đăng ký</a>
+                Chưa có tài khoản? <a className="text-blue-500" onClick={() => history.push('/signup')}>Đăng ký</a>
               </span>
             </div>
           </div>
