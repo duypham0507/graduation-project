@@ -6,6 +6,7 @@ import { SignupComponent } from "auth/signup";
 import { PostsComponent } from "layout/blog-post/posts";
 import { HomeComponent } from "layout/home/index";
 import { SignUpSucess } from "auth/signup-sucess";
+
 function App() {
   return (
     <>
@@ -28,7 +29,6 @@ function App() {
         <Route path={"/home"} exact>
           <HomeComponent />
         </Route>
-        {/* <PrivateRouter path={"/home"} exact>123</PrivateRouter> */}
       </Switch>
     </>
   );
