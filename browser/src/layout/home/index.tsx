@@ -11,7 +11,7 @@ export const HomeComponent = () => {
       <div className="fixed top-0 left-0 z-50 w-full bg-white">
         <HeaderLayout />
       </div>
-      <div className="w-full flex flex-col">
+      <div className="w-full min-h-full flex flex-col">
         <div className="w-full h-[200px]">
           <img
             className="w-full h-full"
@@ -19,7 +19,7 @@ export const HomeComponent = () => {
             alt=""
           />
         </div>
-        <div className="w-full sticky top-[60px]">
+        <div className="w-full sticky top-[60px] z-30">
           <MenuTopCtn />
         </div>
         <div className="mt-5 w-full h-full">

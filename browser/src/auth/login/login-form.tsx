@@ -16,7 +16,8 @@ export const FormLogin = () => {
       password: password,
     };
     let res = await dispatch(login(data) as any);
-    res && history.push('/home')
+    console.log(res);
+    res.type === "login/fulfilled" && history.push('/home')
   };
   return (
     <div className="">

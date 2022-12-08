@@ -20,7 +20,8 @@ export const FormSignUp = () => {
       password: password,
     };
     let res = await dispatch(signup(data) as any);
-    res && history.push('/signup-sucess')
+    console.log(res.payload);
+    res.payload.status === 201 && history.push('/signup-sucess')
   };
 
   return (
