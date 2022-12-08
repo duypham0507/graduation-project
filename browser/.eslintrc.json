@@ -1,0 +1,11 @@
+{
+  "overrides": [
+    {
+      "files": ["src/**/*.js"],
+      "rules": {
+        "quotes": [2, "single"]
+      }
+    }
+  ],
+  "ignorePatterns": "src/ckeditor5/**/*"
+}
