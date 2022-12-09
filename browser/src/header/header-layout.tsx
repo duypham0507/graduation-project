@@ -19,8 +19,6 @@ export const HeaderLayout = () => {
 
   const onSearch = (value: string) => console.log(value);
 
-  console.log(profile);
-  
   return (
     <div className="flex flex-row justify-between py-3 px-4 md:px-6 shadow items-center">
       <div className="flex flex-row">
@@ -42,28 +40,38 @@ export const HeaderLayout = () => {
       </div>
       <div className="flex flex-row">
         <EditOutlined className="mr-2" onClick={() => history.push("/posts")} />
-        {!profile && <div className="w-[190px] flex flex-row justify-between">
-          <Button
-            className="bg-blue-500 text-white hover:text-white font-semibold"
-            onClick={() => history.push("/login")}
-          >
-            Đăng nhập
-          </Button>
-          <Button
-            className="bg-green-500 text-white hover:text-white font-semibold"
-            onClick={() => history.push("/signup")}
-          >
-            Đăng kí
-          </Button>
-        </div>}
-        {profile && <div className="cursor-pointer h-full">
-          <div className="flex flex-row items-center">
-            <div className="w-[40px] h-[40px] mr-1">
-              <img className="w-[40px] h-[40px]" src="/assets/images/icons/icon-user.jpg"  alt="" />
-            </div>
-            <span className="text-md hover:text-orange-400">{profile.name}</span>
+        {!profile && (
+          <div className="w-[190px] flex flex-row justify-between">
+            <Button
+              className="bg-blue-500 text-white hover:text-white font-semibold"
+              onClick={() => history.push("/login")}
+            >
+              Đăng nhập
+            </Button>
+            <Button
+              className="bg-green-500 text-white hover:text-white font-semibold"
+              onClick={() => history.push("/signup")}
+            >
+              Đăng kí
+            </Button>
           </div>
-          </div>}
+        )}
+        {profile && (
+          <div className="cursor-pointer h-full">
+            <div className="flex flex-row items-center">
+              <div className="w-[40px] h-[40px] mr-1">
+                <img
+                  className="w-[40px] h-[40px]"
+                  src="/assets/images/icons/icon-user.jpg"
+                  alt=""
+                />
+              </div>
+              <span className="text-md hover:text-orange-400">
+                {profile.name}
+              </span>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

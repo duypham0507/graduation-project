@@ -1,26 +1,70 @@
-import React, { useState } from "react";
+import React from "react";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
-import CKEditorCustomBuild from "../../ckeditor5/";
+import CKEditorCustomBuild from "../../ckeditor5";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
-const Editor = () => {
+import "./Editor.css";
+import { CustomUploadAdapter } from "./imageUploadAdapter";
+interface IEditor {
+  inititalData?: string;
+  data: string;
+  setData: (data: string) => void;
+}
+
+const extraPLugins = [CustomUploadAdapter];
+
+const Editor = ({ data, setData }: IEditor) => {
   return (
     <>
       <CKEditor
         editor={CKEditorCustomBuild}
-        data="<p>Hello from CKEditor 5!</p>"
+        data={data}
+        config={{
+          image: {
+            resizeUnit: "%",
+            resizeOptions: [
+              {
+                name: "resizeImage:original",
+                value: null,
+                icon: "original",
+              },
+            ],
+            styles: {
+              options: [
+                "inline",
+                "alignLeft",
+                "alignRight",
+                "alignCenter",
+                "alignBlockLeft",
+                "alignBlockRight",
+                "block",
+                "side",
+              ],
+            },
+
+            toolbar: [
+              "imageStyle:inline",
+              "imageStyle:wrapText",
+              "imageStyle:breakText",
+              "|",
+              // "toggleImageCaption",
+              "imageTextAlternative",
+              "linkImage",
+            ],
+          },
+        }}
         onReady={(editor) => {
-          // You can store the "editor" and use when it is needed.
-          console.log("Editor is ready to use!", editor);
+          extraPLugins.forEach((plugin) => {
+            plugin(editor);
+          });
         }}
         onChange={(event, editor) => {
-          const data = editor.getData();
-          console.log({ event, editor, data });
+          setData(editor.getData());
         }}
         onBlur={(event, editor) => {
-          console.log("Blur.", editor);
+          // console.log("Blur.", editor);
         }}
         onFocus={(event, editor) => {
-          console.log("Focus.", editor);
+          // console.log("Focus.", editor);
         }}
       />
     </>
