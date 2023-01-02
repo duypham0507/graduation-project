@@ -14,7 +14,7 @@ const extraPLugins = [CustomUploadAdapter];
 
 const Editor = ({ data, setData }: IEditor) => {
   return (
-    <>
+    <div className="w-full h-full">
       <CKEditor
         editor={CKEditorCustomBuild}
         data={data}
@@ -67,7 +67,7 @@ const Editor = ({ data, setData }: IEditor) => {
           // console.log("Focus.", editor);
         }}
       />
-    </>
+    </div>
   );
 };
 

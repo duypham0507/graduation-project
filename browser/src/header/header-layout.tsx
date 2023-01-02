@@ -1,11 +1,15 @@
-import { Button, Input } from "antd";
-import { SearchOutlined, EditOutlined, HomeOutlined } from "@ant-design/icons";
+import { Button, Input, Popover } from "antd";
+import { SearchOutlined, EditOutlined, HomeOutlined, CaretDownOutlined, ProfileOutlined, LogoutOutlined } from "@ant-design/icons";
 import { useHistory } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { ACCESS_TOKEN } from "constants/index";
 import { parseJwt } from "utils/index";
 
-export const HeaderLayout = () => {
+interface IProps {
+  onSearch?: (value: string) => void
+}
+
+export const HeaderLayout = (props: IProps) => {
   const history = useHistory();
 
   const [profile, setProfile] = useState<any>();
@@ -17,7 +21,27 @@ export const HeaderLayout = () => {
     }
   }, []);
 
-  const onSearch = (value: string) => console.log(value);
+  const onSearch = (event) => {
+    event.keyCode == 13 && props.onSearch && props.onSearch(event.target.value)
+  };
+
+  const logout = () => {
+    localStorage.removeItem(ACCESS_TOKEN);
+    location.reload()
+  }
+
+  const content = (
+    <div>
+      <button className="flex flex-row py-3 px-3" onClick={() => history.push('/account')}>
+        <ProfileOutlined />
+        <span className="text-md w-full text-black leading-none pl-3">Quản lý tài khoản</span>
+      </button>
+      <button className="flex flex-row py-3 px-3" onClick={logout}>
+        <LogoutOutlined  className="text-red-500"/>
+        <span className="text-md text-red-500 leading-none pl-3">Đăng xuất</span>
+      </button>
+    </div>
+  );
 
   return (
     <div className="flex flex-row justify-between py-3 px-4 md:px-6 shadow items-center">
@@ -32,6 +56,7 @@ export const HeaderLayout = () => {
             placeholder="Tìm kiếm..."
             className="w-full bg-transparent rounded-[8px] px-4 focus:outline-none focus:ring-2 focus:ring-transparent"
             type="text"
+            onKeyUp={onSearch}
           />
           <button type="submit" className="float-left absolute right-4 top-2">
             <SearchOutlined />
@@ -39,7 +64,7 @@ export const HeaderLayout = () => {
         </div>
       </div>
       <div className="flex flex-row">
-        <EditOutlined className="mr-2" onClick={() => history.push("/posts")} />
+        {profile && <EditOutlined className="mr-2" onClick={() => history.push("/create-posts")} />}
         {!profile && (
           <div className="w-[190px] flex flex-row justify-between">
             <Button
@@ -57,20 +82,23 @@ export const HeaderLayout = () => {
           </div>
         )}
         {profile && (
-          <div className="cursor-pointer h-full">
-            <div className="flex flex-row items-center">
-              <div className="w-[40px] h-[40px] mr-1">
-                <img
-                  className="w-[40px] h-[40px]"
-                  src="/assets/images/icons/icon-user.jpg"
-                  alt=""
-                />
+          <Popover content={content} trigger="click">
+            <div className="cursor-pointer h-full">
+              <div className="flex flex-row items-center">
+                <div className="w-[40px] h-[40px] mr-1">
+                  <img
+                    className="w-[40px] h-[40px]"
+                    src="/assets/images/icons/icon-user.jpg"
+                    alt=""
+                  />
+                </div>
+                <span className="text-md mr-2 hover:text-orange-400">
+                  {profile.name}
+                </span>
+                <span className=""><CaretDownOutlined /></span>
               </div>
-              <span className="text-md hover:text-orange-400">
-                {profile.name}
-              </span>
             </div>
-          </div>
+          </Popover>
         )}
       </div>
     </div>

@@ -3,9 +3,11 @@ import { Switch, Route } from "react-router-dom";
 import PrivateRouter from "components/PrivateRouter";
 import { LoginComponent } from "auth/login";
 import { SignupComponent } from "auth/signup";
-import { PostsComponent } from "layout/blog-post/posts";
+import { CUPostsComponent } from "layout/cu-post/index";
 import { HomeComponent } from "layout/home/index";
 import { SignUpSucess } from "auth/signup-sucess";
+import { PostsComponent } from "layout/post";
+import { AccountComponent } from "layout/account";
 
 function App() {
   return (
@@ -20,7 +22,10 @@ function App() {
         <Route path={"/signup-sucess"} exact>
           <SignUpSucess />
         </Route>
-        <Route path={"/posts"} exact>
+        <Route path={"/create-posts"} exact>
+          <CUPostsComponent />
+        </Route>
+        <Route path={"/posts/:postsId"}>
           <PostsComponent />
         </Route>
         <Route path={"/"} exact>
@@ -28,6 +33,9 @@ function App() {
         </Route>
         <Route path={"/home"} exact>
           <HomeComponent />
+        </Route>
+        <Route path={"/account"} exact>
+          <AccountComponent />
         </Route>
       </Switch>
     </>

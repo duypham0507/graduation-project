@@ -1,1 +1,6 @@
-
+.scrollable-view {
+    scrollbar-gutter: stable;
+    overflow: hidden;
+    -ms-scroll-chaining: chained;
+    overscroll-behavior: auto;
+}

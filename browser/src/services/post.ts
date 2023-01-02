@@ -9,3 +9,15 @@ export interface ICreatePostPayload {
 export const createPost = (payload: ICreatePostPayload) => {
   return axios.post("/post/", payload);
 };
+
+export const getPost = () => {
+  return axios.get("/post/", {params: {limit: 6}});
+};
+
+export const getPostDetail = (id_post) => {
+  return axios.get("/post/" + id_post);
+};
+
+export const getPostFilter = (param) => {
+  return axios.get("/post/search", {params: param});
+};
