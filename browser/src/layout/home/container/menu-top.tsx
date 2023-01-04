@@ -1,5 +1,5 @@
 export const MenuTopCtn = () => {
-    return <div className="w-full h-[60px] bg-gray-500 py-4">
+    return <div className="w-full h-[60px] bg-gray-200 py-4">
         <div className="w-full px-4 mx-[70px]">
             <div className="flex flex-row justify-between items-center">
                 <ul className="flex flex-row flex-nowrap items-center">

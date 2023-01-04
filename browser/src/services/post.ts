@@ -10,8 +10,8 @@ export const createPost = (payload: ICreatePostPayload) => {
   return axios.post("/post/", payload);
 };
 
-export const getPost = () => {
-  return axios.get("/post/", {params: {limit: 6}});
+export const getPost = (params) => {
+  return axios.get("/post/", {params: params});
 };
 
 export const getPostDetail = (id_post) => {

@@ -17,7 +17,9 @@ export const NewPostsCtn = (props:IProps) => {
   const [listPost, setListPost] = useState<any>([])
   useEffect(() => {
     const init = async () => {
-      await getPost().then(rs => {
+      let param:any = {};
+      param.limit = 6
+      await getPost(param).then(rs => {
         setListPost(rs.data.data);
         setMinIndex(0)
         setMaxIndex(pageSize)        
@@ -68,8 +70,8 @@ export const NewPostsCtn = (props:IProps) => {
               </div>
             </div>
             <div className="w-[380px] min-h-[140px] inline-block align-top relative">
-              <div className="text-base font-['r_conde_regular']">
-                {item.search.length > 200 ? item.search.split(" ").slice(0,50).join(" ") + "..." : item.search}
+              <div className="text-base font-['r_conde_regular']"> 
+               {item.search.length > 200 ? item.search.split(" ").slice(0,50).join(" ") + "..." : item.search}
               </div>
               <Button className="absolute bottom-0 right-0 py-[3px] px-[10px] border-blue-500 hover:bg-blue-500">
                 <span className="text-blue-500 hover:text-white text-sm">

@@ -26,6 +26,7 @@ export const HeaderLayout = (props: IProps) => {
   };
 
   const logout = () => {
+    history.push('/home')
     localStorage.removeItem(ACCESS_TOKEN);
     location.reload()
   }
@@ -63,7 +64,7 @@ export const HeaderLayout = (props: IProps) => {
           </button>
         </div>
       </div>
-      <div className="flex flex-row">
+      <div className="flex flex-row mr-5">
         {profile && <EditOutlined className="mr-2" onClick={() => history.push("/create-posts")} />}
         {!profile && (
           <div className="w-[190px] flex flex-row justify-between">

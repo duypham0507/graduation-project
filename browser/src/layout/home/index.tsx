@@ -15,7 +15,7 @@ export const HomeComponent = () => {
   }
     
   return (
-    <div className="w-full h-full overflow-x-hidden">
+    <div className="w-full h-full overflow-x-hidden scrollbar">
       <div className="fixed top-0 left-0 z-50 w-full bg-white">
         <HeaderLayout onSearch={(keyword) => onSearch(keyword)}/>
       </div>

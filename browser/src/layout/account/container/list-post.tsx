@@ -6,7 +6,8 @@ export const ListPostScreen = () => {
   const [listPost, setListPost] = useState<any>([]);
   useEffect(() => {
     const init = async () => {
-      await getPost().then((rs) => {
+      let param:any = {}
+      await getPost(param).then((rs) => {
         setListPost(rs.data.data);
       });
     };

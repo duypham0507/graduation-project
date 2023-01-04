@@ -1,16 +1,27 @@
 import { Button, Input, Select } from "antd";
 import { HeaderLayout } from "header/header-layout";
 import Editor from "components/editor";
-import { useCallback, useState } from "react";
+import { useCallback, useState, useEffect } from 'react';
 import { createPost } from "services/post";
 import { useHistory } from "react-router-dom";
+import { getTag } from "services/tag";
 
 const { TextArea } = Input;
-const options: any = [];
+const { Option } = Select;
 export const CUPostsComponent = () => {
   let history = useHistory();
   const [content, setContent] = useState<string>("");
   const [title, setTitle] = useState<string>("");
+  const [listTag, setListTag] = useState<any>([]);
+  useEffect(() => {
+    const init = async () => {
+      await getTag().then((rs) => {
+        setListTag(rs.data.data);
+      });
+    };
+    init();
+  }, []);
+
   const handleUpdateContent = useCallback(
     (data: string) => {
       setContent(data);
@@ -39,20 +50,9 @@ export const CUPostsComponent = () => {
       console.log(e);
     }
   }, [content, title]);
+  console.log('1',listTag);
+  
   return (
-    // <>
-    //   <div className="pl-4 pr-4 mt-4">
-    //     <Editor data={postData} setData={handleUpdatePostData} />
-    //     <div className="flex justify-between mt-3">
-    //       <button
-    //         className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 border border-blue-700 rounded"
-    //         onClick={handleUploadPost}
-    //       >
-    //         Xuất bản
-    //       </button>
-    //     </div>
-    //   </div>
-    // </>
     <div className="w-full h-full flex flex-col relative">
       <div className="z-50">
         <HeaderLayout />
@@ -79,11 +79,11 @@ export const CUPostsComponent = () => {
                   mode="multiple"
                   allowClear
                   style={{ width: "100%" }}
-                  placeholder="Gắn thẻ bài viết của bạn. Tối đa 5 thẻ. Ít nhất 1 thẻ!"
+                  placeholder="Gắn thẻ bài viết của bạn. Tối đa 3 thẻ. Ít nhất 1 thẻ!"
                   onChange={() => {}}
-                  options={options}
-                  defaultValue={"123"}
-                />
+                >
+                  {listTag.length > 0 && listTag.map((item) => <Option key={item.id_tag} value={item.id_tag}>{item.tag_name}</Option>)}
+                </Select>
               </div>
             </div>
           </div>
