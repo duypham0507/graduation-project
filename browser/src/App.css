@@ -47,3 +47,28 @@
 .scrollable-view::-webkit-scrollbar-track-piece:end {
     background: transparent;
 }
+
+.ant-tabs-content {
+    display: flex;
+    width: 100%;
+}
+
+.ant-tabs-content-holder {
+    display: flex;
+}
+
+.ant-tabs-tabpane {
+    flex: none;
+    width: 100%;
+    outline: none;
+}
+
+.tabs-edit-account.ant-tabs-left > .ant-tabs-content-holder > .ant-tabs-content > .ant-tabs-tabpane, .ant-tabs-left > div > .ant-tabs-content-holder > .ant-tabs-content > .ant-tabs-tabpane{
+    padding-left: 0px !important;
+}
+
+.flex-grow-limit {
+    flex-grow: 1;
+    min-height: 0px;
+    min-width: 0px;
+}

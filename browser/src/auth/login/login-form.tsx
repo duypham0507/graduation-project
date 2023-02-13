@@ -4,13 +4,18 @@ import { login, LoginPayload } from "services/auth";
 import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
 
-export const FormLogin = () => {
+interface IProps {
+  onCallBack?: (loading?: boolean) => void
+}
+
+export const FormLogin = (props: IProps) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const dispatch = useDispatch();
   let history = useHistory();
 
   const onSubmit = async () => {
+    props.onCallBack!(true)
     let data: LoginPayload = {
       email: email,
       password: password,
@@ -18,6 +23,7 @@ export const FormLogin = () => {
     let res = await dispatch(login(data) as any);
     console.log(res);
     res.type === "login/fulfilled" && history.push('/home')
+    props.onCallBack!(false)
   };
   return (
     <div className="">

@@ -5,7 +5,10 @@ import { useHistory } from "react-router-dom";
 import { SignUpPayload } from "services/auth";
 import { signup } from '../../services/auth';
 
-export const FormSignUp = () => {
+interface IProps {
+  onCallBack?: (loading?: boolean) => void
+}
+export const FormSignUp = (props:IProps) => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -14,13 +17,15 @@ export const FormSignUp = () => {
   const dispatch = useDispatch();
 
   const onSubmit = async () => {
+    props.onCallBack!(true)
     let data: SignUpPayload = {
       name: name,
       email: email,
       password: password,
     };
     let res = await dispatch(signup(data) as any);
-    console.log(res.payload);
+    console.log(res);
+    props.onCallBack!(false)
     res.payload.status === 201 && history.push('/signup-sucess')
   };
 

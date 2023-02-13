@@ -22,7 +22,7 @@ export const PostFilterCtn = (props:IProps) => {
         <h2 className="font-bold not-italic pb-4 text-2xl">Bài viết liên quan</h2>
       </div>
       <div className="w-full flex-grow-limit scrollable-view flex flex-row flex-wrap">
-        {[1,2,3,4,5,6].map(item => <div className="w-1/2 md:w-1/3 xxl:w-1/4 xlHDP:w-1/5 xlPHD:w-1/6 max-h-[318px] pl-4 mb-2 relative bg-transparent item-program group">
+        {[1,2,3,4,5,6].map((item, i) => <div key={i} className="w-1/2 md:w-1/3 xxl:w-1/4 xlHDP:w-1/5 xlPHD:w-1/6 max-h-[318px] pl-4 mb-2 relative bg-transparent item-program group">
           <div className="bg-cover h-auto w-full rounded-xl overflow-hidden mx-auto my-0">
             <img src="/assets/images/img/header-img.jpg" alt="" className="h-auto w-full"/>
           </div>

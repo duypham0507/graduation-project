@@ -1,7 +1,7 @@
 import { Button, Input, Popover } from "antd";
 import { SearchOutlined, EditOutlined, HomeOutlined, CaretDownOutlined, ProfileOutlined, LogoutOutlined } from "@ant-design/icons";
 import { useHistory } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { memo, useEffect, useState } from "react";
 import { ACCESS_TOKEN } from "constants/index";
 import { parseJwt } from "utils/index";
 
@@ -9,9 +9,8 @@ interface IProps {
   onSearch?: (value: string) => void
 }
 
-export const HeaderLayout = (props: IProps) => {
+export const HeaderLayout = memo((props: IProps) => {
   const history = useHistory();
-
   const [profile, setProfile] = useState<any>();
 
   useEffect(() => {
@@ -43,7 +42,6 @@ export const HeaderLayout = (props: IProps) => {
       </button>
     </div>
   );
-
   return (
     <div className="flex flex-row justify-between py-3 px-4 md:px-6 shadow items-center">
       <div className="flex flex-row">
@@ -65,7 +63,6 @@ export const HeaderLayout = (props: IProps) => {
         </div>
       </div>
       <div className="flex flex-row mr-5">
-        {profile && <EditOutlined className="mr-2" onClick={() => history.push("/create-posts")} />}
         {!profile && (
           <div className="w-[190px] flex flex-row justify-between">
             <Button
@@ -86,10 +83,10 @@ export const HeaderLayout = (props: IProps) => {
           <Popover content={content} trigger="click">
             <div className="cursor-pointer h-full">
               <div className="flex flex-row items-center">
-                <div className="w-[40px] h-[40px] mr-1">
+                <div className="w-[40px] h-[40px] mr-1 rounded-full">
                   <img
-                    className="w-[40px] h-[40px]"
-                    src="/assets/images/icons/icon-user.jpg"
+                    className="w-[40px] h-[40px] rounded-full"
+                    src={profile.avatar ? profile.avatar : "/assets/images/icons/icon-user.jpg"}
                     alt=""
                   />
                 </div>
@@ -104,4 +101,4 @@ export const HeaderLayout = (props: IProps) => {
       </div>
     </div>
   );
-};
+});

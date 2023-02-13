@@ -17,7 +17,7 @@ export interface SignUpPayload {
   avatar?:string;
 }
 
-interface SocialLogin {
+export interface SocialLogin {
   accessToken: string;
   method: AUTH_METHOD;
 }
@@ -56,10 +56,41 @@ export const loginSocial = createAsyncThunk(
   "login-social",
   async (payload: SocialLogin, { fulfillWithValue, rejectWithValue }) => {
     try {
-      const response = await axios.post("/loginSocial", payload);
-      return fulfillWithValue(response.data);
+      const response = await axios.post("/user/loginSocial", payload);
+      const { accessToken } = response.data;
+      localStorage.setItem(ACCESS_TOKEN, accessToken);
+      return {
+        user: parseJwt(accessToken),
+      };
     } catch (e) {
       return rejectWithValue(e);
     }
   }
 );
+
+export const forgotPassword = async (param) => {
+  try {
+    const response = await axios.post("/user/sendForgetEmail", param);
+    return response
+  } catch (e) {
+    return e;
+  }
+}
+
+export const changePassword = async (param) => {
+  try {
+    const response = await axios.post("/user/changePassword", param);
+    return response
+  } catch (e) {
+    return e;
+  }
+}
+
+export const createNewPassword = async (param) => {
+  try {
+    const response = await axios.post("/user/changeForgotPassword", param);
+    return response
+  } catch (e) {
+    return e;
+  }
+}

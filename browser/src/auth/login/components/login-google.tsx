@@ -13,7 +13,7 @@ function LoginWithGoogleButton(props: IProps) {
         clientId: GOOGLE_APP_ID,
         autoLoad: false,
         isSignedIn: false,
-        prompt: 'select_account',
+        prompt: 'consent',
         cookiePolicy: 'none',
         onSuccess: (res: GoogleLoginResponse | GoogleLoginResponseOffline) => {
             props.onToken((res as any).tokenId);
@@ -34,7 +34,6 @@ function LoginWithGoogleButton(props: IProps) {
         signIn();
     }
 
-    // if (disable) return <div />
     return (
         <button className="p-4 flex h-[40px] w-full justify-center items-center border rounded-[2px] hover:bg-gray-50" onClick={onLogin}>
             <img className="mr-4" src="/assets/images/icons/icon-login-google.png" width={24} height={24} alt=""/>
