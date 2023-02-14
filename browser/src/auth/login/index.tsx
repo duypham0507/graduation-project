@@ -15,11 +15,20 @@ export const LoginComponent = () => {
   const [isLoading, setLoading] = useState<boolean>(false);
   const dispatch = useDispatch();
 
-  const loginWithGoogle = (token: string) => {
+  const loginWithGoogle = async (token: string) => {
     console.log(token);
     let param: SocialLogin = {
       accessToken: token,
       method: AUTH_METHOD.GOOGLE
+    }
+    try{
+      let res = await dispatch(loginSocial(param) as any);
+      console.log(res);
+      res.type === "login-social/fulfilled" && history.push('/home')
+      setLoading(false)
+    } catch (error) {
+      console.log(error)
+      setLoading(false)
     }
   };
 

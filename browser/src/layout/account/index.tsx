@@ -21,9 +21,9 @@ export const AccountComponent = () => {
                 <Tabs.TabPane key="2" tab="Bài viết của tôi">
                   <ListPostScreen />
                 </Tabs.TabPane>
-                <Tabs.TabPane key="3" tab="Danh sách thẻ tag">
+                {/* <Tabs.TabPane key="3" tab="Danh sách thẻ tag">
                   <ListTagScreen />
-                </Tabs.TabPane>
+                </Tabs.TabPane> */}
               </Tabs>
             </div>
           </div>

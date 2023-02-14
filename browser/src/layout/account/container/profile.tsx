@@ -1,5 +1,5 @@
-import { CameraOutlined, EnvironmentOutlined } from "@ant-design/icons";
-import { DatePicker, Input, Radio, Upload } from "antd";
+import { CameraOutlined, EnvironmentOutlined, MailOutlined } from "@ant-design/icons";
+import { DatePicker, Input, Radio, Upload, message } from "antd";
 import { ACCESS_TOKEN } from "constants/index";
 import { useEffect, useState } from "react";
 import { sendVerifyEmail } from "services/verify";
@@ -11,6 +11,34 @@ export const ProfileScreen = () => {
   const [email, setEmail] = useState<any>();
   const [birthday, setBirthday] = useState<any>(null);
   const [gender, setGender] = useState<any>();
+  const [messageApi, contextHolder] = message.useMessage();
+  const [isLoading, setLoading] = useState<boolean>(false);
+
+  const verifyEmail = async () => {
+    setLoading(true)
+    await sendVerifyEmail().then(res => {
+      console.log(res);
+      setLoading(false)
+      success()
+    }).catch((err) => {
+      console.log(err);
+      error()
+    })
+  };
+
+  const success = () => {
+    messageApi.open({
+      type: 'success',
+      content: 'Gửi email thành công',
+    });
+  };
+
+  const error = () => {
+    messageApi.open({
+      type: 'error',
+      content: 'Có lỗi xảy ra',
+    });
+  };
 
   useEffect(() => {
     const accessToken = localStorage.getItem(ACCESS_TOKEN);
@@ -21,6 +49,7 @@ export const ProfileScreen = () => {
   console.log(profile);
   
   return <div className="flex flex-col w-full h-full px-6">
+    {contextHolder}
     <div className="scrollable-view flex flex-col pb-10 w-full">
         <span className="text-xl text-baseGray-100 font-semibold">Thông tin cá nhân</span>
         <div className="flex rounded">
@@ -49,7 +78,7 @@ export const ProfileScreen = () => {
                     </div>
                   </div>
                 </div> */}
-                <div className="flex flex-row items-center w-full mb-5">
+                {/* <div className="flex flex-row items-center w-full mb-5">
                   <span className="w-[90px] flex-none text-right mr-5">Ngày sinh:</span>
                   <div className="flex flex-row items-center space-x-2 text-left">
                     <DatePicker className="w-full" onChange={() => {}} value={birthday}/>
@@ -64,20 +93,20 @@ export const ProfileScreen = () => {
                     <Radio value="3">Khác</Radio>
                   </Radio.Group>
                   </div>
-                </div>
+                </div> */}
             </div>
         </div>
         <div className="flex flex-col w-full mt-2">
           <span className="text-xl text-baseGray-100 font-semibold mb-10">Thông tin liên hệ</span>
           <div className="flex flex-row items-start">
             <div className="border rounded-xl w-[48px] h-[48px] justify-center items-center flex mr-4">
-              <EnvironmentOutlined />
+              <MailOutlined />
             </div>
             <div className="flex flex-col items-start">
               <span className="w-[90px] text-[16px] mr-5 text-gray-500">Email:</span>
               <div className="flex flex-row items-center">
                 <span className="text-[16px] text-black">{profile?.email} {profile?.is_verified ? <span className="text-green-500">(Đã xác minh)</span>:<span className="text-red-500">(Chưa xác minh)</span>}</span>
-                {!profile?.is_verified && <button onClick={() => sendVerifyEmail()} className="text-[16px] text-gray-300 hover:text-blue-500 ml-4">Xác minh ngay</button>}
+                {!profile?.is_verified && <button onClick={() => verifyEmail()} className="text-[16px] text-gray-300 hover:text-blue-500 ml-4">Xác minh ngay</button>}
               </div>
             </div>
           </div>

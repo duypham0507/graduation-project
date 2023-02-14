@@ -13,7 +13,7 @@ export const VerifySuccess = () => {
     useEffect(() => {
         const init = async () => {
             let res: any = await verifyEmail(param.verifyToken)
-            setResponse(res.data!)
+            setResponse(res)
             console.log("res", res);
         }
         init()
@@ -25,8 +25,8 @@ export const VerifySuccess = () => {
         </div>
         <div className="flex flex-col items-center justify-center w-full h-full">
             <div className="flex flex-col items-center">
-                <span className="text-xl font-semibold">{response?.message === "Verify success" ? "Xác thực thành công!" : "Xác thực không thành công"}</span>
-                <button className="text-blue-600" onClick={() => history.push('/login')}>Quay lại đăng nhập</button>
+                <span className="text-xl font-semibold">{response?.status === 200 ? "Xác thực thành công!" : "Xác thực không thành công"}</span>
+                <button className="text-blue-600" onClick={() => history.push('/login')}>Quay lại trang chủ</button>
             </div>
         </div>
     </div>

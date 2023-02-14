@@ -23,6 +23,9 @@ export const SignupComponent = () => {
       accessToken: token,
       method: AUTH_METHOD.GOOGLE
     }
+    let res = await dispatch(loginSocial(param) as any);
+    console.log(res);
+    res.type === "login-social/fulfilled" && history.push('/home')
   }
 
   const signUpFacebook = async (resFB) => {

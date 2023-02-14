@@ -66,14 +66,14 @@ export const NewPostsCtn = (props: IProps) => {
           {listPost.map((item, index) => index >= minIndex &&
             index < maxIndex && (
               <div key={index} className="border-b px-0 py-4">
-                <h3 className="text-xl mt-0 mb-3 cursor-pointer" onClick={() => viewPost(item.slug, item.id_post)}>
+                <h3 className="text-xl mt-0 mb-3 cursor-pointer hover:text-blue-600 font-semibold" onClick={() => viewPost(item.slug, item.id_post)}>
                   {item.title}
                 </h3>
                 <div className="w-[215px] h-[140px] mr-5 align-top inline-block overflow-hidden cursor-pointer" onClick={() => viewPost(item.slug, item.id_post)}>
                   <div className="no-underline">
                     <img
                       className="w-full"
-                      src="/assets/images/img/dong-phong-nha-quang-binh.jpg"
+                      src={"/assets/images/img/dong-phong-nha-quang-binh.jpg"}
                       alt=""
                     />
                   </div>

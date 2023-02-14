@@ -7,7 +7,7 @@ import { getPostDetail, updateReaction } from "services/post";
 import parse from "html-react-parser";
 import moment from "moment";
 import { PostFilterCtn } from "./container/post-filter";
-import { EyeOutlined, HeartOutlined, LikeOutlined } from "@ant-design/icons";
+import { BookOutlined, EyeOutlined, FlagFilled, HeartOutlined, LikeOutlined } from "@ant-design/icons";
 import { PostAuthorCtn } from "./container/post-author";
 import { RecommendPostCtn } from "./container/post-recommend";
 import { Avatar, Card, Skeleton } from "antd";
@@ -151,8 +151,10 @@ export const PostsComponent = () => {
                       </div>
                     ))}
                   </div>
-                  <div className="flex flex-row justify-end">
-                    <button onClick={actionReaction} className="hover:text-blue-500"><LikeOutlined />{" "}{isLiked ? "Đã thích" : "Thích"}</button>
+                  <div className="flex flex-row justify-center mt-2 border-t border-b py-2">
+                    <button onClick={actionReaction} className="font-semibold text-gray-600 hover:text-blue-700 mx-2"><LikeOutlined />{" "}{isLiked ? "Đã thích" : "Thích"}</button>
+                    <button onClick={actionReaction} className="font-semibold text-gray-600 mx-2"><BookOutlined />{" "}Lưu bài viết</button>
+                    <button onClick={actionReaction} className="font-semibold text-gray-600 mx-2"><FlagFilled />{" "}Báo cáo</button>
                   </div>
                 </Skeleton>
               </div>

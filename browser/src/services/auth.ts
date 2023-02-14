@@ -79,7 +79,7 @@ export const forgotPassword = async (param) => {
 
 export const changePassword = async (param) => {
   try {
-    const response = await axios.post("/user/changePassword", param);
+    const response = await axios.patch("/user/changePassword", param);
     return response
   } catch (e) {
     return e;

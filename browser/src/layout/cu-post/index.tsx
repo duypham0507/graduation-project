@@ -18,8 +18,8 @@ export const CUPostsComponent = () => {
   const [content, setContent] = useState<string>();
   const [title, setTitle] = useState<string>();
   const [tag, setTag] = useState<any>([]);
-  const [errorTitle, setErrorTitle] = useState<any>([]);
-  const [errorContent, setErrorContent] = useState<any>([]);
+  const [errorTitle, setErrorTitle] = useState<any>();
+  const [errorContent, setErrorContent] = useState<any>();
   // const [errorTag, setErrorTag] = useState<any>([]);
   const [listTag, setListTag] = useState<any>([]);
   const [isLoading, setLoading] = useState<boolean>(false);
@@ -78,7 +78,7 @@ export const CUPostsComponent = () => {
       const rs = !location.postId ? await createPost({
         title: title!,
         content: content!,
-        avatar:avatar!,
+        avatar: avatar!,
         tags: tag,
       }) : await updatePost(location.postId, {
         title: title,
@@ -93,16 +93,16 @@ export const CUPostsComponent = () => {
   };
 
   const isValidate = () => {
+    let validate = true
     if (title == undefined) {
       setErrorTitle('Tiêu đề hiện đang để trống')
-      return false
+      validate = false
     }
-    if (!content) {
+    if (content == undefined || content == '') {
       setErrorContent('Nội dung hiện đang để trống')
-      return false
-    } else {
-      return true
+      validate = false
     }
+    return validate
   }
 
   return (
@@ -123,34 +123,39 @@ export const CUPostsComponent = () => {
               </label>
             </div>
             <div className="flex flex-col w-full ml-4">
-              <div className="w-full h-10 mb-5 flex flex-row items-center">
-                <span className="w-[100px]">Tiêu đề: </span>
-                <Input
-                  className=""
-                  placeholder="Tiêu đề"
-                  value={title}
-                  onChange={(event) => setTitle(event.target.value)}
-                  required
-                />
-                {/* <FormError errorMessage={errorTitle} /> */}
+              <div className="flex flex-col mb-4">
+                <div className="w-full h-10 flex flex-row items-center">
+                  <span className="w-[100px]">Tiêu đề: </span>
+                  <Input
+                    className=""
+                    placeholder="Tiêu đề"
+                    value={title}
+                    onChange={(event) => setTitle(event.target.value)}
+                    required
+                  />
+                </div>
+                {errorTitle && <FormErrorWrapper errorMessage={errorTitle} />}
               </div>
-              <div className="w-full h-10 mb-5 flex flex-row items-center">
-                <span className="w-[100px]">Gắn thẻ: </span>
-                <Select
-                  mode="multiple"
-                  allowClear
-                  style={{ width: "100%" }}
-                  placeholder="Gắn thẻ bài viết của bạn. Tối đa 3 thẻ. Ít nhất 1 thẻ!"
-                  onChange={(value) => setTag(value)}
-                  value={tag}
-                >
-                  {listTag.length > 0 && listTag.map((item) => <Option key={item.id_tag} value={item.id_tag}>{item.tag_name}</Option>)}
-                </Select>
+              <div className="flex flex-col mb-4">
+                <div className="w-full h-10 flex flex-row items-center">
+                  <span className="w-[100px]">Gắn thẻ: </span>
+                  <Select
+                    mode="multiple"
+                    allowClear
+                    style={{ width: "100%" }}
+                    placeholder="Gắn thẻ bài viết của bạn. Tối đa 3 thẻ. Ít nhất 1 thẻ!"
+                    onChange={(value) => setTag(value)}
+                    value={tag}
+                  >
+                    {listTag.length > 0 && listTag.map((item) => <Option key={item.id_tag} value={item.id_tag}>{item.tag_name}</Option>)}
+                  </Select>
+                </div>
               </div>
             </div>
           </div>
           <div className="w-full h-10 my-4 flex flex-col items-start">
             <span className="w-[100px]">Nội dung: </span>
+            {errorContent && <FormErrorWrapper errorMessage={errorContent} />}
             <div className="flex flex-row h-full">
               <Editor data={content!} setData={handleUpdateContent} />
             </div>

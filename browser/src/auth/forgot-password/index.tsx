@@ -29,8 +29,6 @@ export const ForgotPasswordComponent = () => {
   };
 
   const success = () => {
-    console.log('123');
-
     messageApi.open({
       type: 'success',
       content: 'Gửi email thành công',

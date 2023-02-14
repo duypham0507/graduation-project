@@ -1,4 +1,5 @@
 import classNames from 'classnames';
+import { FormError } from './form-error';
 
 interface IProps {
   errorMessage?: string
@@ -7,9 +8,9 @@ interface IProps {
 }
 export function FormErrorWrapper({ errorMessage, template, className }: IProps) {
   let mainClass = classNames(
-    ' text-xs h-[26px] mt-[-8px] mb-2 flex items-center px-2',
+    ' text-xs h-[26px] mt-1 mb-2 flex items-center px-2',
     {
-      'bg-baseRed-20 ': !template
+      'bg-red-100': !template
     },
     {
       'bg-white pl-0': template == 'white'
@@ -21,7 +22,7 @@ export function FormErrorWrapper({ errorMessage, template, className }: IProps) 
 
   return (
     <div className={classNames(mainClass, { hidden: !errorMessage }, className)}>
-      {/* <FormError errorMessage={errorMessage} /> */}
+      <FormError errorMessage={errorMessage} />
     </div>
   )
 }
