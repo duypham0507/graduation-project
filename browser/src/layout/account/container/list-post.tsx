@@ -119,7 +119,7 @@ export const ListPostScreen = () => {
         {listPost && listPost.map((item, index) => <div key={index} className="w-full cursor-pointer bg-transparent hover:bg-gray-100 relative px-3 py-2">
           <div className="flex flex-row space-x-4 h-[120px] rounded-sm items-start">
             <div className="w-[213px] h-[118px] rounded-none flex-none">
-              <img src="/assets/images/img/header-img.jpg" alt="" className="object-cover w-[213px] h-[118px] rounded-none flex-none" />
+              <img src={item.thumbnail ? item.thumbnail : "/assets/images/img/dong-phong-nha-quang-binh.jpg"} alt="" className="object-cover w-[213px] h-[118px] rounded-none flex-none" />
             </div>
             <div className="flex flex-row items-center justify-between w-full">
               <div className="flex flex-col w-full">

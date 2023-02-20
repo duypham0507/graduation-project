@@ -19,7 +19,7 @@ export const VerifySuccess = () => {
         init()
     }, [])
     
-    return <div className="w-full h-full overflow-x-hidden scrollbar">
+    return <div className="w-full h-full overflow-x-hidden">
         <div className="fixed top-0 left-0 z-50 w-full bg-white">
             <HeaderLayout onSearch={(keyword) => {}} />
         </div>

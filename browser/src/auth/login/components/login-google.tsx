@@ -7,7 +7,7 @@ interface IProps {
     onToken: (token: string) => void;
 }
 
-function LoginWithGoogleButton(props: IProps) {
+export function LoginWithGoogleButton(props: IProps) {
     const [disable, setDisable] = useState<boolean>(false);
     const { signIn, loaded } = useGoogleLogin({
         clientId: GOOGLE_APP_ID,
@@ -16,7 +16,7 @@ function LoginWithGoogleButton(props: IProps) {
         prompt: 'consent',
         cookiePolicy: 'none',
         onSuccess: (res: GoogleLoginResponse | GoogleLoginResponseOffline) => {
-            props.onToken((res as any).tokenId);
+            props.onToken((res as any).accessToken);
         },
         onFailure: (error) => {
             console.log('onFailure error', error)
@@ -42,4 +42,3 @@ function LoginWithGoogleButton(props: IProps) {
     )
 }
 
-export { LoginWithGoogleButton };

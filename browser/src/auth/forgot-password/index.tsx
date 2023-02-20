@@ -1,5 +1,7 @@
 import { LoadingOutlined } from "@ant-design/icons";
 import { Button, Spin, message } from "antd"
+import { FormErrorWrapper } from "components/form-error/form-error-wrapper";
+import { EMAIL_VALID } from "constants/index";
 import { HeaderAuthen } from "header/header-authen"
 import { useState } from "react";
 import { useHistory } from "react-router-dom";
@@ -10,7 +12,8 @@ export const ForgotPasswordComponent = () => {
   let history = useHistory();
   const [isLoading, setLoading] = useState<boolean>(false);
   const [messageApi, contextHolder] = message.useMessage();
-  const [email, setEmail] = useState("");
+  const [email, setEmail] = useState<any>();
+  const [errorEmail, setErrorEmail] = useState<any>();
 
   const onSubmit = async () => {
     setLoading(true)
@@ -21,12 +24,25 @@ export const ForgotPasswordComponent = () => {
       console.log(res);
       setLoading(false)
       success()
-      setEmail('')
+      setEmail(undefined)
     }).catch((err) => {
       console.log(err);
       error()
     })
   };
+
+  const isValidate = () => {
+    let validate = true
+    if (!email) {
+      setErrorEmail('Vui lòng nhập tài khoản email')
+      validate = false
+    }
+    if (email && !EMAIL_VALID.test(email)) {
+      setErrorEmail('Vui lòng nhập đúng email')
+      validate = false
+    }
+    return validate
+  }
 
   const success = () => {
     messageApi.open({
@@ -56,15 +72,18 @@ export const ForgotPasswordComponent = () => {
               </span>
               <span className="text-gray-500 mt-2 text-center">Nhập Email bạn đã đăng ký tài khoản,chúng tôi sẽ gửi mail xác nhận giúp bạn lấy lại mật khẩu</span>
             </div>
-            <div className="h-[48px] bg-transparent border rounded-lg mb-2">
-              <input
-                className="w-full px-4 h-full block border-0 bg-transparent text-black outline-none rounded-lg"
-                type="email"
-                placeholder="Email"
-                value={email}
-                onChange={(event) => setEmail(event.target.value)}
-              />
+            <div>
+              <div className="h-[48px] bg-transparent border rounded-lg mb-2">
+                <input
+                  className="w-full px-4 h-full block border-0 bg-transparent text-black outline-none rounded-lg"
+                  type="email"
+                  placeholder="Email"
+                  value={email}
+                  onChange={(event) => setEmail(event.target.value)}
+                />
+              </div>
             </div>
+            {errorEmail && <FormErrorWrapper errorMessage={errorEmail} className="!mt-[-12px]" />}
             <Button
               className=" flex flex-row text-white font-medium px-4 items-center rounded-[2px] w-full justify-center mt-4 h-10 bg-green-500 hover:bg-green-500"
               type="primary"

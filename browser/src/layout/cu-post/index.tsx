@@ -1,4 +1,4 @@
-import { Button, Input, Select } from "antd";
+import { Button, Input, Select, message } from "antd";
 import { HeaderLayout } from "header/header-layout";
 import Editor from "components/editor";
 import { useCallback, useState, useEffect } from 'react';
@@ -20,7 +20,7 @@ export const CUPostsComponent = () => {
   const [tag, setTag] = useState<any>([]);
   const [errorTitle, setErrorTitle] = useState<any>();
   const [errorContent, setErrorContent] = useState<any>();
-  // const [errorTag, setErrorTag] = useState<any>([]);
+  const [errorTag, setErrorTag] = useState<any>();
   const [listTag, setListTag] = useState<any>([]);
   const [isLoading, setLoading] = useState<boolean>(false);
   const [postsInfo, setPostsInfo] = useState<any>({});
@@ -78,7 +78,6 @@ export const CUPostsComponent = () => {
       const rs = !location.postId ? await createPost({
         title: title!,
         content: content!,
-        avatar: avatar!,
         tags: tag,
       }) : await updatePost(location.postId, {
         title: title,
@@ -86,6 +85,7 @@ export const CUPostsComponent = () => {
         tags: tag,
       });
       setLoading(false)
+      message.success("Xuất bản thành công,vui lòng đợi quản trị viên kiểm duyệt")
       history.push("/home");
     } catch (e) {
       setLoading(false)
@@ -96,6 +96,14 @@ export const CUPostsComponent = () => {
     let validate = true
     if (title == undefined) {
       setErrorTitle('Tiêu đề hiện đang để trống')
+      validate = false
+    }
+    if (!tag || tag?.length == 0) {
+      setErrorTag('Danh muc hiện đang để trống')
+      validate = false
+    }
+    if(tag && tag?.length > 3){
+      setErrorTag('Số danh muc hiện đang nhiều hơn 3')
       validate = false
     }
     if (content == undefined || content == '') {
@@ -134,7 +142,7 @@ export const CUPostsComponent = () => {
                     required
                   />
                 </div>
-                {errorTitle && <FormErrorWrapper errorMessage={errorTitle} />}
+                {errorTitle && <FormErrorWrapper className="!mt-[-3px]" errorMessage={errorTitle} />}
               </div>
               <div className="flex flex-col mb-4">
                 <div className="w-full h-10 flex flex-row items-center">
@@ -144,18 +152,22 @@ export const CUPostsComponent = () => {
                     allowClear
                     style={{ width: "100%" }}
                     placeholder="Gắn thẻ bài viết của bạn. Tối đa 3 thẻ. Ít nhất 1 thẻ!"
-                    onChange={(value) => setTag(value)}
+                    onChange={(value) => {
+                      tag && tag?.length <= 3 && setErrorTag(undefined)
+                      setTag(value)
+                    }}
                     value={tag}
                   >
                     {listTag.length > 0 && listTag.map((item) => <Option key={item.id_tag} value={item.id_tag}>{item.tag_name}</Option>)}
                   </Select>
                 </div>
+                {errorTag && <FormErrorWrapper className="!mt-[-3px]" errorMessage={errorTag} />}
               </div>
             </div>
           </div>
           <div className="w-full h-10 my-4 flex flex-col items-start">
             <span className="w-[100px]">Nội dung: </span>
-            {errorContent && <FormErrorWrapper errorMessage={errorContent} />}
+            {errorContent && <FormErrorWrapper  className="!mb-[2px]" errorMessage={errorContent} />}
             <div className="flex flex-row h-full">
               <Editor data={content!} setData={handleUpdateContent} />
             </div>
@@ -165,7 +177,7 @@ export const CUPostsComponent = () => {
       <div className="w-full h-[60px] absolute bottom-0 right-0 p-4 border-t">
         <div className="flex flex-row items-center justify-end">
           <button className="mr-2" onClick={() => history.push("/home")}>Hủy</button>
-          <Button onClick={handleUploadPost} loading={isLoading}>Xuất bản</Button>
+          <Button className="!border-blue-400 !text-blue-400 hover:bg-blue-500 hover:!text-white" onClick={handleUploadPost} loading={isLoading}>Xuất bản</Button>
         </div>
       </div>
     </div>

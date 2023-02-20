@@ -13,6 +13,7 @@ import { PostWithTagComponent } from "layout/post-with-tag";
 import { CreateNewPasswordComponent } from "auth/create-new-password";
 import { ForgotPasswordComponent } from "auth/forgot-password";
 import { UpdatePasswordSuccess } from "auth/update-password-success";
+import { PostWithAuthorComponent } from "layout/post-with-author";
 
 function App() {
   return (
@@ -42,6 +43,9 @@ function App() {
         <Route path={"/home"} component={HomeComponent} />
         <Route path={"/search-tags"} exact>
           <PostWithTagComponent />
+        </Route>
+        <Route path={"/search-author"} exact>
+          <PostWithAuthorComponent />
         </Route>
         <Route path={"/account"} exact>
           <AccountComponent />

@@ -34,7 +34,7 @@ export const FormLogin = (props: IProps) => {
 
   const isValidate = () => {
     let validate = true
-    if (email == undefined || password == '') {
+    if (email == undefined || email == '') {
       setErrorEmail('Vui lòng nhập tài khoản email')
       validate = false
     } 

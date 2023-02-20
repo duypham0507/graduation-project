@@ -78,12 +78,8 @@ export const forgotPassword = async (param) => {
 }
 
 export const changePassword = async (param) => {
-  try {
-    const response = await axios.patch("/user/changePassword", param);
-    return response
-  } catch (e) {
-    return e;
-  }
+  const response = await axios.patch("/user/changePassword", param);
+  return response
 }
 
 export const createNewPassword = async (param) => {

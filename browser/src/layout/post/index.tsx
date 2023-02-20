@@ -3,25 +3,26 @@ import { FooterCtn } from "layout/home/container/footer";
 import { TopViewCtn } from "layout/home/container/top-view";
 import { useHistory, useLocation, useParams } from "react-router-dom";
 import { useEffect, useMemo, useState } from "react";
-import { getPostDetail, updateReaction } from "services/post";
+import { ICreatePostPayload, IPostPayload, getPostDetail, updateReaction } from "services/post";
 import parse from "html-react-parser";
 import moment from "moment";
 import { PostFilterCtn } from "./container/post-filter";
-import { BookOutlined, EyeOutlined, FlagFilled, HeartOutlined, LikeOutlined } from "@ant-design/icons";
+import { BookOutlined, ExclamationCircleFilled, EyeOutlined, FlagFilled, HeartOutlined, LikeOutlined } from "@ant-design/icons";
 import { PostAuthorCtn } from "./container/post-author";
 import { RecommendPostCtn } from "./container/post-recommend";
-import { Avatar, Card, Skeleton } from "antd";
+import { Avatar, Card, Skeleton, Modal } from 'antd';
 import BackToTopButton from "components/BackToTopButton";
 import { CommentCtn } from "./container/comment";
 import { ACCESS_TOKEN } from "constants/index";
 import { parseJwt } from "utils/index";
 
 const { Meta } = Card;
+const { warning } = Modal;
 export const PostsComponent = () => {
   const history = useHistory();
   const [loading, setLoading] = useState(false);
   const [showButton, setShowButton] = useState(false);
-  const [postsInfo, setPostsInfo] = useState<any>({});
+  const [postsInfo, setPostsInfo] = useState<IPostPayload>();
   const location = useLocation<{ postsId: string }>();
   const content = document.getElementById('content-post')
   const [profile, setProfile] = useState<any>();
@@ -45,7 +46,6 @@ export const PostsComponent = () => {
     // setLoading(false)
   };
 
-  console.log(profile)
   useEffect(() => {
     const onScroll = () => {
       content?.scrollTop! >= 500 ? setShowButton(true) : setShowButton(false)
@@ -63,8 +63,8 @@ export const PostsComponent = () => {
   };
   
   const isLiked = useMemo(() => {
-    let checkLike = postsInfo.reactionlists?.some(x => x.id_user == profile.id)
-    if(checkLike && postsInfo.reactionlists.length > 0){
+    let checkLike = postsInfo?.reactionlists?.some(x => x.id_user == profile?.id!)
+    if(checkLike && postsInfo?.reactionlists?.length! > 0){
       return true
     } else {
       return false
@@ -73,17 +73,32 @@ export const PostsComponent = () => {
 
   const actionReaction = async () => {
     let param:any = {
-      id_post: postsInfo.id_post,
+      id_post: postsInfo?.id_post,
       reaction_type: "LIKE",
       status: isLiked ? "0" : "1"
     }
-    
+    if(!profile){
+      showWarning()
+      return
+    }
     await updateReaction(param)
     init()
   }
 
+  const showWarning = () => {
+    warning({
+      title: 'Bạn cần đăng nhập để thực hiện thao tác này',
+      icon: <ExclamationCircleFilled />,
+      okText: 'Xác nhận',
+      okType: 'link',
+      onOk() {
+        console.log('OK');
+      },
+    });
+  };
+
   const description = () => <div className="flex flex-col h-full">
-    <span className="text-base text-gray-300">{postsInfo.userinfo?.email!}</span>
+    <span className="text-base text-gray-300">{postsInfo?.userinfo?.email!}</span>
     <div className="flex flex-row items-center mt-4">
       <span className="mr-4 text-gray-400 cursor-pointer">
         <EyeOutlined /> 500
@@ -111,7 +126,7 @@ export const PostsComponent = () => {
                   <header className="border-b mb-5">
                     <h1 className="pt-2 text-2xl font-bold">{postsInfo?.title}</h1>
                     <div className="">
-                      <span className="text-gray-400">
+                      <span className="text-gray-400 cursor-pointer" onClick={() => history.push('/search-author', {useInfo: postsInfo?.userinfo!})}>
                         Tác giả: {postsInfo?.userinfo?.name}
                       </span>
                     </div>
@@ -121,7 +136,7 @@ export const PostsComponent = () => {
                           {" "}
                           <span className="text-gray-400">
                             Ngày đăng:{" "}
-                            {postsInfo.create_at &&
+                            {postsInfo?.create_at &&
                               moment(postsInfo?.create_at).format("MM/DD/YYYY")}
                           </span>
                         </p>
@@ -140,12 +155,12 @@ export const PostsComponent = () => {
                     </div>
                   </header>
                   <div className="">
-                    {postsInfo.content && parse(postsInfo?.content)}
+                    {postsInfo?.content && parse(postsInfo?.content)}
                   </div>
                   <div className="flex flex-row items-center">
-                    {postsInfo?.tags?.map((item) => (
-                      <div className="px-2 mr-1 border-[1px] rounded cursor-pointer bg-gray-200"  onClick={() => history.push('/search-tags', {tags: item.id})}>
-                        <span className="text-sm text-blue-500">
+                    {postsInfo?.tags?.map((item, i) => (
+                      <div key={i} className="px-2 pb-1 mr-1 border-[1px] rounded cursor-pointer bg-gray-200"  onClick={() => history.push('/search-tags', {tag: item})}>
+                        <span className="text-sm text-blue-500 hover:text-blue-600">
                           {item.tag_name}
                         </span>
                       </div>
@@ -153,8 +168,8 @@ export const PostsComponent = () => {
                   </div>
                   <div className="flex flex-row justify-center mt-2 border-t border-b py-2">
                     <button onClick={actionReaction} className="font-semibold text-gray-600 hover:text-blue-700 mx-2"><LikeOutlined />{" "}{isLiked ? "Đã thích" : "Thích"}</button>
-                    <button onClick={actionReaction} className="font-semibold text-gray-600 mx-2"><BookOutlined />{" "}Lưu bài viết</button>
-                    <button onClick={actionReaction} className="font-semibold text-gray-600 mx-2"><FlagFilled />{" "}Báo cáo</button>
+                    <button className="font-semibold text-gray-600 mx-2"><BookOutlined />{" "}Lưu bài viết</button>
+                    <button className="font-semibold text-gray-600 mx-2"><FlagFilled />{" "}Báo cáo</button>
                   </div>
                 </Skeleton>
               </div>
@@ -165,14 +180,14 @@ export const PostsComponent = () => {
                 >
                   <Meta
                     className=""
-                    avatar={<Avatar className="w-[70px] h-[70px]" src={postsInfo.userinfo?.avatar! ? postsInfo.userinfo.avatar : "/assets/images/icons/icon-user.jpg"} />}
-                    title={<h4 className="text-xl font-semibold">{postsInfo.userinfo?.name!}</h4>}
+                    avatar={<Avatar className="w-[70px] h-[70px]" src={postsInfo?.userinfo?.avatar! ? postsInfo?.userinfo.avatar : "/assets/images/icons/icon-user.jpg"} />}
+                    title={<h4 className="text-xl font-semibold cursor-pointer" onClick={() => history.push('/search-author', {useInfo: postsInfo?.userinfo!})}>{postsInfo?.userinfo?.name!}</h4>}
                     description={description()}
                   />
                 </Card>}
                 <div className="">
                   <Skeleton loading={loading} active avatar className="h-[500px]">
-                    <RecommendPostCtn />
+                    <RecommendPostCtn tags={postsInfo?.tags![0].id} authorId={postsInfo?.userinfo?.id.toString()}/>
                   </Skeleton>
                 </div>
               </div>
@@ -181,11 +196,11 @@ export const PostsComponent = () => {
         </div>
         <div className="mx-auto py-2 w-4/5 h-auto">
           <div className="">
-            <PostAuthorCtn author_id={postsInfo.author_id} callBack={backToTop}/>
+            <PostAuthorCtn author_id={postsInfo?.author_id} callBack={backToTop}/>
           </div>
         </div>
         <div className="mx-auto py-2 w-4/5 h-auto">
-          <CommentCtn post_id={location.state.postsId} author_id={postsInfo.author_id}/>
+          <CommentCtn post_id={location.state.postsId} author_id={postsInfo?.author_id?.toString()}/>
         </div>
         <div className="w-full h-[300px]">
           <FooterCtn />

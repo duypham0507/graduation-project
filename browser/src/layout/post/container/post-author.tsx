@@ -3,7 +3,7 @@ import { useHistory } from "react-router-dom";
 import { getPostFilter } from "services/post";
 
 interface IProps {
-  author_id: number;
+  author_id?: number;
   callBack: () => void
 }
 

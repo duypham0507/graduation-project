@@ -9,24 +9,24 @@ import { FooterCtn } from "layout/home/container/footer";
 const pageSize = 6
 const antIcon = <LoadingOutlined style={{ fontSize: 28 }} spin />;
 
-export const PostWithTagComponent = () => {
+export const PostWithAuthorComponent = () => {
     const history = useHistory();
     const [current, setCurrent] = useState()
     const [listPost, setListPost] = useState<any>([])
     const [isLoading, setLoading] = useState(false);
     const [minIndex, setMinIndex] = useState<number>(0)
     const [maxIndex, setMaxIndex] = useState<number>(0)
-    const location = useLocation<{ tag: any }>();
-    console.log(location.state.tag);
+    const location = useLocation<{ useInfo: any }>();
+    console.log(location.state.useInfo);
 
 
     useEffect(() => {
-        if (!location.state.tag) return
+        if (!location.state.useInfo) return
         const init = async () => {
             setLoading(true)
             let param: any = {};
             param.limit = 6;
-            param.tags = location.state.tag.id;
+            param.authorId = location.state.useInfo.id;
             await getPostFilter(param).then(rs => {
                 setListPost(rs.data.data.data);
                 setMinIndex(0)
@@ -56,7 +56,7 @@ export const PostWithTagComponent = () => {
                 <div className="mx-auto w-[1000px] flex flex-row">
                     <div className="ml-0 mr-2 w-2/3">
                         <div className="mt-2 w-full flex flex-col">
-                            <h1 className="m-0 p-0 text-2xl font-bold pb-3 border-b">Bài viết theo danh mục: {location.state.tag.tag_name}</h1>
+                            <h1 className="m-0 p-0 text-2xl font-bold pb-3 border-b">Bài viết của tác giả: {location.state.useInfo.name}</h1>
                             <div className="p-0 mx-0 my-5 w-full min-h-20">
                                 <Spin spinning={isLoading} indicator={antIcon}>
                                     {listPost.map((item, index) => index >= minIndex &&
@@ -101,10 +101,10 @@ export const PostWithTagComponent = () => {
                         <NewPostsCtn />
                     </div>
                 </div>
-            </div><div className="w-full">
+            </div>
+            <div className="w-full">
                 <FooterCtn />
             </div>
-
         </div>
     </div>
 }

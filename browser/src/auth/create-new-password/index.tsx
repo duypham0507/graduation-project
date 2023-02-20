@@ -86,7 +86,7 @@ export const CreateNewPasswordComponent = () => {
                                     onChange={(event) => setNewPassword(event.target.value)}
                                 />
                             </div>
-                            {newPassword && <FormErrorWrapper errorMessage={newPassword} className="!mt-[-12px]"/>}
+                            {errorNewPassword && <FormErrorWrapper errorMessage={errorNewPassword} className="!mt-[-12px]"/>}
                         </div>
                         <div>
                             <div className="h-[48px] bg-transparent border rounded-lg mb-2">
@@ -98,7 +98,7 @@ export const CreateNewPasswordComponent = () => {
                                     onChange={(event) => setAceptPassword(event.target.value)}
                                 />
                             </div>
-                            {aceptPassword && <FormErrorWrapper errorMessage={aceptPassword} className="!mt-[-12px]"/>}
+                            {errorAceptPassword && <FormErrorWrapper errorMessage={errorAceptPassword} className="!mt-[-12px]"/>}
                         </div>
                         <Button
                             className=" flex flex-row text-white font-medium px-4 items-center rounded-[2px] w-full justify-center mt-4 h-10 bg-green-500 hover:bg-green-500"

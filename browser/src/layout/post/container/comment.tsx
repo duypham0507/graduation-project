@@ -20,8 +20,8 @@ const static_menu_action = [
 ]
 
 interface IProps {
-  post_id: string;
-  author_id: string
+  post_id?: string;
+  author_id?: string
 }
 export const CommentCtn = (props: IProps) => {
   const [listComment, setListComment] = useState<any>([])
@@ -60,7 +60,7 @@ export const CommentCtn = (props: IProps) => {
   }, [])
 
   const getComments = async () => {
-    await getComment(props.post_id).then(res => {
+    await getComment(props.post_id!).then(res => {
       setListComment(res.data.data.data);
       console.log('res', listComment);
     }).catch(error => console.log('error', error))
@@ -113,7 +113,7 @@ export const CommentCtn = (props: IProps) => {
         {listComment && <div className="w-full flex flex-row justify-center mb-3">
           <span className="text-base text-gray-500"><MessageOutlined /> {listComment.length > 0 ? `Có ${listComment.length} bình luận` : "Chưa có bình luận nào"}</span>
         </div>}
-        {listComment && listComment.map((item) => <div className="flex flex-row items-center w-full mb-5 relative">
+        {listComment && listComment.map((item, i) => <div key={i} className="flex flex-row items-center w-full mb-5 relative">
           <div className="flex-none mr-5">
             <img src={item.user_info?.avatar ? item.user_info?.avatar : "/assets/images/icons/icon-user.jpg"} alt="" className="w-[60px] h-[60px] rounded-full" />
           </div>

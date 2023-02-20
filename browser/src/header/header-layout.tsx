@@ -21,7 +21,8 @@ export const HeaderLayout = memo((props: IProps) => {
   }, []);
 
   const onSearch = (event) => {
-    event.keyCode == 13 && props.onSearch && props.onSearch(event.target.value)
+    // event.keyCode == 13 && props.onSearch && props.onSearch(event.target.value);
+    event.keyCode == 13 && history.push('/home', {keyword: event.target.value})
   };
 
   const logout = () => {

@@ -1,7 +1,7 @@
 import { LoadingOutlined } from "@ant-design/icons";
 import { Button, Pagination, Skeleton, Spin } from "antd";
 import { useEffect, useState } from "react";
-import { useHistory } from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
 import { getPost, getPostFilter } from "services/post";
 const antIcon = <LoadingOutlined style={{ fontSize: 28 }} spin />;
 const pageSize = 6;
@@ -17,8 +17,9 @@ export const NewPostsCtn = (props: IProps) => {
   const [maxIndex, setMaxIndex] = useState<number>(0)
   const [listPost, setListPost] = useState<any>([])
   const [isLoading, setLoading] = useState(false);
+  const location = useLocation<{ keyword: any }>();
   useEffect(() => {
-    if (props.keyword && props.keyword != '') return
+    if (location.state?.keyword! && location.state?.keyword! != '') return
     const init = async () => {
       setLoading(true)
       let param: any = {};
@@ -31,19 +32,19 @@ export const NewPostsCtn = (props: IProps) => {
       setLoading(false)
     };
     init()
-  }, [])
+  }, [location.state?.keyword!])
 
   useEffect(() => {
     const init = async () => {
-      if (props.keyword == undefined || props.keyword == '') return
+      if (location.state?.keyword! == undefined) return
       let param: any = {};
-      param.search = props.keyword
+      param.search = location.state?.keyword!
       await getPostFilter(param).then(rs => {
         setListPost(rs.data.data.data);
       })
     };
     init()
-  }, [props.keyword])
+  }, [location.state?.keyword!])
 
   const viewPost = (slug, id) => {
     history.push('/posts/' + slug, {  // location state
@@ -72,8 +73,8 @@ export const NewPostsCtn = (props: IProps) => {
                 <div className="w-[215px] h-[140px] mr-5 align-top inline-block overflow-hidden cursor-pointer" onClick={() => viewPost(item.slug, item.id_post)}>
                   <div className="no-underline">
                     <img
-                      className="w-full"
-                      src={"/assets/images/img/dong-phong-nha-quang-binh.jpg"}
+                      className="object-cover w-[215px] h-[140px]"
+                      src={item.thumbnail ? item.thumbnail : "/assets/images/img/dong-phong-nha-quang-binh.jpg"}
                       alt=""
                     />
                   </div>

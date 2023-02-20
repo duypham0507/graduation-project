@@ -17,8 +17,7 @@ export const SignupComponent = () => {
   const dispatch = useDispatch();
 
   const signUpGoogle = async (token) => {
-    // let res = await dispatch(login(token) as any);
-    console.log(token);
+    setLoading(true)
     let param: SocialLogin = {
       accessToken: token,
       method: AUTH_METHOD.GOOGLE
@@ -26,6 +25,7 @@ export const SignupComponent = () => {
     let res = await dispatch(loginSocial(param) as any);
     console.log(res);
     res.type === "login-social/fulfilled" && history.push('/home')
+    setLoading(false)
   }
 
   const signUpFacebook = async (resFB) => {
