@@ -23,7 +23,8 @@ export const NewPostsCtn = (props: IProps) => {
     const init = async () => {
       setLoading(true)
       let param: any = {};
-      param.limit = 6
+      param.limit = 6;
+      param.orderBy = 'CREATE_AT'
       await getPost(param).then(rs => {
         setListPost(rs.data.data);
         setMinIndex(0)
