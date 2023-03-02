@@ -1,4 +1,4 @@
-import { ExclamationCircleFilled, EyeOutlined, LikeOutlined, MoreOutlined } from "@ant-design/icons";
+import { EditOutlined, ExclamationCircleFilled, EyeOutlined, LikeOutlined, MoreOutlined } from "@ant-design/icons";
 import { Dropdown, Modal } from "antd";
 import classNames from 'classnames';
 import moment from "moment";
@@ -51,12 +51,13 @@ export const ListPostScreen = () => {
     })
   };
   
-  const handleAction = (type,item) => {
-    switch(type){
-      case"detail":
-        history.push('/posts/' + item.slug, {postsId: item.id_post});
+
+  const handleAction = (type, item) => {
+    switch (type) {
+      case "detail":
+        history.push('/posts/' + item.id_post + '-' + item.slug);
         break;
-      case"edit":
+      case "edit":
         history.push('/update-posts/' + item.id_post);
         break;
       case "delete":
@@ -77,20 +78,20 @@ export const ListPostScreen = () => {
         await init()
       },
       onCancel() {
-        
+
       },
     });
   };
 
   const renderWithStatus = (status) => {
-    switch(status) {
-      case"APPROVED":
+    switch (status) {
+      case "APPROVED":
         return {
           bg_corlor: "border-green-500",
           text_corlor: "text-green-500",
           text: "Đã duyệt"
         };
-      case"UNAPPROVED":
+      case "UNAPPROVED":
         return {
           bg_corlor: "border-orange-500",
           text_corlor: "text-orange-500",
@@ -111,10 +112,16 @@ export const ListPostScreen = () => {
     }
   }
   return (
-    <div className="w-full h-full flex flex-col flex-grow-limit">
-      <span className="text-xl text-baseGray-100 font-semibold px-6">
-        Bài viết của tôi
-      </span>
+    <div className="w-full h-full flex flex-col flex-grow-limit mt-2">
+      <div className="flex flex-row justify-between items-center pl-4 pr-6">
+        <span className="text-xl text-baseGray-100 font-semibold">
+          Bài viết của tôi
+        </span>
+        <button onClick={() => history.push("/create-posts")} className="border flex flex-row px-4 py-2 items-center rounded-sm h-8 border-blue-500 text-blue-500 hover:text-white hover:bg-blue-500">
+          <EditOutlined className="mr-2"/>
+          <span className="text-lg">Viết bài</span>
+        </button>
+      </div>
       <div className="scrollable-view pb-20 gap-y-4 mt-6 h-full">
         {listPost && listPost.map((item, index) => <div key={index} className="w-full cursor-pointer bg-transparent hover:bg-gray-100 relative px-3 py-2">
           <div className="flex flex-row space-x-4 h-[120px] rounded-sm items-start">

@@ -33,7 +33,11 @@ export const FormSignUp = (props: IProps) => {
     let res = await dispatch(signup(data) as any);
     console.log(res);
     props.onCallBack!(false)
-    res.payload.status === 201 && history.push('/signup-sucess')
+    if(res.payload.status === 201){
+      history.push('/signup-sucess')
+    } else {
+      setErrorSignUp(res.payload.response.data.message)
+    }
   };
 
   const isValidate = () => {

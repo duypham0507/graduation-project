@@ -5,6 +5,7 @@ import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { FormErrorWrapper } from "components/form-error/form-error-wrapper";
 import { EMAIL_VALID } from "constants/index";
+import { getUserInfo } from "services/user";
 
 interface IProps {
   onCallBack?: (loading?: boolean) => void
@@ -28,7 +29,12 @@ export const FormLogin = (props: IProps) => {
     };
     let res = await dispatch(login(data) as any);
     console.log(res);
-    res.type === "login/fulfilled" && history.push('/home')
+    if(res.type === "login/fulfilled"){
+      history.push('/home');
+      await getUserInfo()
+    } else {
+      setErrorLogin(res.payload.response.data.message)
+    }
     props.onCallBack!(false)
   };
 

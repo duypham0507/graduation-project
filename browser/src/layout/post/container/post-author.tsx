@@ -4,6 +4,7 @@ import { getPostFilter } from "services/post";
 
 interface IProps {
   author_id?: number;
+  id_post?: number
   callBack: () => void
 }
 
@@ -26,16 +27,16 @@ export const PostAuthorCtn = (props: IProps) => {
       <h2 className="font-bold not-italic pb-3 text-xl">Cùng tác giả</h2>
     </div>
     <div className="w-full flex-grow-limit flex flex-row flex-wrap">
-      {listPost.map((item, index) => 
+      {listPost.filter(x => x.id_post != props.id_post).map((item, index) => 
       <div key={index} 
           onClick={() => {
             props.callBack!()
-            history.push('/posts/' + item.slug, {postsId: item.id_post})
+            history.push('/posts/' + item.id_post + '-' + item.slug)
           }} 
           className="cursor-pointer w-1/2 md:w-1/3 xxl:w-1/4 xlHDP:w-1/5 xlPHD:w-1/6 max-h-[318px] pl-4 mb-2 relative bg-transparent"
         >
         <div className="bg-cover h-auto w-full rounded-xl overflow-hidden mx-auto my-0">
-          <img src="/assets/images/img/header-img.jpg" alt="" className="h-auto w-full" />
+          <img src={item.thumbnail ? item.thumbnail : "/assets/images/img/header-img.jpg"} alt="" className="h-auto w-full object-cover" />
         </div>
         <div className="text-left pt-2 pb-5 w-full">
           <h3 className="font-bold text-lg my-[0.1rem]">{item.title}</h3>

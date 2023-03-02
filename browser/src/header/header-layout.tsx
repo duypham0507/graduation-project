@@ -4,6 +4,7 @@ import { useHistory } from "react-router-dom";
 import { memo, useEffect, useState } from "react";
 import { ACCESS_TOKEN } from "constants/index";
 import { parseJwt } from "utils/index";
+import { getUserInfo } from "services/user";
 
 interface IProps {
   onSearch?: (value: string) => void
@@ -18,6 +19,13 @@ export const HeaderLayout = memo((props: IProps) => {
     if (accessToken) {
       setProfile(parseJwt(accessToken));
     }
+    // const init = async () => {
+    //   await getUserInfo().then(rs => {
+    //     console.log(rs);
+    //     setProfile(rs.data.data)
+    //   })
+    // }
+    // init()
   }, []);
 
   const onSearch = (event) => {
@@ -46,11 +54,14 @@ export const HeaderLayout = memo((props: IProps) => {
   return (
     <div className="flex flex-row justify-between py-3 px-4 md:px-6 shadow items-center">
       <div className="flex flex-row">
-        <HomeOutlined
+        {/* <HomeOutlined
           className="mr-2"
           style={{ fontSize: "150%" }}
           onClick={() => history.push("/home")}
-        />
+        /> */}
+        <div className="w-[35px] h-[35px] mr-2 cursor-pointer" onClick={() => history.push("/home")}>
+          <img src="/assets/images/img/logo.jpg" alt="" className="w-[35px] h-[35px]"/>
+        </div>
         <div className=" w-[400px] h-10 bg-baseGray-20 flex flex-row relative rounded-[8px] border-[1px]">
           <input
             placeholder="Tìm kiếm..."

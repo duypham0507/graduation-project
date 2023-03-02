@@ -11,11 +11,10 @@ const antIcon = <LoadingOutlined style={{ fontSize: 28 }} spin />;
 
 export const PostWithTagComponent = () => {
     const history = useHistory();
-    const [current, setCurrent] = useState()
+    const [current, setCurrent] = useState(0)
     const [listPost, setListPost] = useState<any>([])
     const [isLoading, setLoading] = useState(false);
-    const [minIndex, setMinIndex] = useState<number>(0)
-    const [maxIndex, setMaxIndex] = useState<number>(0)
+    const [metadata, setMetadata] = useState<any>(null);
     const location = useLocation<{ tag: any }>();
     console.log(location.state.tag);
 
@@ -25,12 +24,12 @@ export const PostWithTagComponent = () => {
         const init = async () => {
             setLoading(true)
             let param: any = {};
-            param.limit = 6;
+            param.limit = pageSize;
+            param.offset =  current! * pageSize;
             param.tags = location.state.tag.id;
             await getPostFilter(param).then(rs => {
                 setListPost(rs.data.data.data);
-                setMinIndex(0)
-                setMaxIndex(pageSize)
+                setMetadata(rs.data.data.metadata);
             }).catch((error) => console.log(error))
             setLoading(false)
         };
@@ -42,16 +41,11 @@ export const PostWithTagComponent = () => {
             postsId: id,
         })
     }
-    const changePage = (page) => {
-        setCurrent(page)
-        setMinIndex((page - 1) * pageSize)
-        setMaxIndex(page * pageSize);
-    }
     return <div className="w-full h-full overflow-x-hidden scrollbar">
         <div className="fixed top-0 left-0 z-50 w-full bg-white">
             <HeaderLayout onSearch={(keyword) => { }} />
         </div>
-        <div className="w-full min-h-full flex flex-col">
+        <div className="w-full h-full flex flex-col">
             <div className="mt-20 w-full h-full">
                 <div className="mx-auto w-[1000px] flex flex-row">
                     <div className="ml-0 mr-2 w-2/3">
@@ -59,8 +53,7 @@ export const PostWithTagComponent = () => {
                             <h1 className="m-0 p-0 text-2xl font-bold pb-3 border-b">Bài viết theo danh mục: {location.state.tag.tag_name}</h1>
                             <div className="p-0 mx-0 my-5 w-full min-h-20">
                                 <Spin spinning={isLoading} indicator={antIcon}>
-                                    {listPost.map((item, index) => index >= minIndex &&
-                                        index < maxIndex && (
+                                    {listPost.map((item, index) => (
                                             <div key={index} className="border-b px-0 py-4">
                                                 <h3 className="text-xl mt-0 mb-3 cursor-pointer hover:text-blue-600 font-semibold" onClick={() => viewPost(item.slug, item.id_post)}>
                                                     {item.title}
@@ -91,9 +84,12 @@ export const PostWithTagComponent = () => {
                             <div className="w-full flex flex-row justify-center items-center">
                                 <Pagination
                                     pageSize={pageSize}
-                                    current={current}
-                                    total={listPost.length}
-                                    onChange={changePage} />
+                                    current={metadata?.page!}
+                                    total={metadata?.total!}
+                                    onChange={(page) => {
+                                        setCurrent(page - 1);
+                                    }}
+                                />
                             </div>
                         </div>
                     </div>

@@ -1,17 +1,19 @@
-import { CameraOutlined, EnvironmentOutlined, MailOutlined } from "@ant-design/icons";
+import { CameraOutlined, EnvironmentOutlined, MailOutlined, SaveOutlined } from "@ant-design/icons";
 import { DatePicker, Form, Input, Modal, Radio, Upload, message } from "antd";
 import { ACCESS_TOKEN } from "constants/index";
 import { useEffect, useState } from "react";
 import { changePassword } from "services/auth";
+import { editUserInfo, getUserInfo } from "services/user";
 import { sendVerifyEmail } from "services/verify";
 import { parseJwt } from "utils/index";
 
 export const ProfileScreen = () => {
+  const accessToken = localStorage.getItem(ACCESS_TOKEN);
   const [form] = Form.useForm();
-  const [profile, setProfile] = useState<any>({});
+  const [profile, setProfile] = useState<any>();
   const [name, setName] = useState<any>();
   const [avatar, setAvatar] = useState<any>(null);
-  const [email, setEmail] = useState<any>();
+  const [info, setInfo] = useState<any>();
   const [messageApi, contextHolder] = message.useMessage();
   const [isLoading, setLoading] = useState<boolean>(false);
   const [loadingAva, setLoadingAva] = useState(false);
@@ -55,11 +57,19 @@ export const ProfileScreen = () => {
   };
 
   useEffect(() => {
-    const accessToken = localStorage.getItem(ACCESS_TOKEN);
     if (accessToken) {
-      setProfile(parseJwt(accessToken));
       setAvatar(parseJwt(accessToken).avatar)
     }
+    const init = async () => {
+      await getUserInfo().then(rs => {
+        console.log(rs);
+        setProfile(rs.data.data);
+        setName(rs.data.data.name);
+        setInfo(rs.data.data.info);
+        setAvatar(rs.data.data.avatar);
+      })
+    }
+    init()
   }, []);
   console.log(profile);
 
@@ -82,10 +92,30 @@ export const ProfileScreen = () => {
     }
   }
 
+  const handlerSaveUserInfo = async () => {
+    let param:any = {
+      name: name!,
+      // avatar: avatar!,
+      info: info!,
+    }
+    await editUserInfo(param).then(rs => {
+      messageApi.success("Lưu thông tin thành công")
+    }).catch(err => {
+      console.log(err);
+      message.error(err?.response?.data?.message)
+    })
+  }
+
   return <div className="flex flex-col w-full h-full px-6">
     {contextHolder}
     <div className="scrollable-view flex flex-col pb-10 w-full">
-      <span className="text-xl text-baseGray-100 font-semibold">Thông tin cá nhân</span>
+      <div className="flex flex-row w-full items-center justify-between pr-2">
+        <span className="text-xl text-baseGray-100 font-semibold">Thông tin cá nhân</span>
+        <button onClick={handlerSaveUserInfo} className="border flex flex-row px-4 py-2 items-center rounded-sm h-8 border-blue-500 text-blue-500 hover:text-white hover:bg-blue-500">
+          <SaveOutlined className="mr-2"/>
+          <span className="text-lg">Lưu thay đổi</span>
+        </button>
+      </div>
       <div className="flex rounded">
         <input type="file" id="file" onChange={handleChangeAvatar} className="hidden" />
         <label htmlFor="file" className="rounded-full w-[150px] h-[150px] relative cursor-pointer hover:opacity-50 my-2">
@@ -101,7 +131,7 @@ export const ProfileScreen = () => {
             <span className="w-[90px] flex-none text-right mr-5">Tên hiển thị:</span>
             <div className="flex flex-row items-center space-x-2 text-left">
               <div className="text-sm w-full inline-block">
-                <Input type="text" className="" value={profile?.name} onChange={() => { }} />
+                <Input type="text" className="" value={name} onChange={(event) => setName(event.target.value)} />
               </div>
             </div>
           </div>
@@ -129,14 +159,14 @@ export const ProfileScreen = () => {
           <div className="flex flex-col items-start">
             <span className="w-[90px] text-[16px] text-gray-500">Địa chỉ:</span>
             <div className="flex flex-row items-center space-x-2 text-left">
-              <button className="text-[16px] text-blue-500">Thêm địa chỉ</button>
+              {<Input type="text" className="" placeholder="Nhập địa chỉ" value={info} onChange={(event) => setInfo(event.target.value)} />}
             </div>
           </div>
         </div>
       </div>
     </div>
     <Modal
-      visible={openModal}
+      open={openModal}
       title="Đổi mật khẩu"
       okText="Xác nhận"
       okType="default"

@@ -8,3 +8,19 @@ export const getUser = async () => {
         return e;
     }
 };
+
+export const getUserInfo = async () => {
+    try {
+        const response = await axios.get("/user/userInfo");
+        const { user_info } = response.data;
+        localStorage.setItem("user_info", user_info);
+        return response
+    } catch (e: any) {
+        return e;
+    }
+};
+
+export const editUserInfo = async (param) => {
+    const response = await axios.patch("/user/edit", param);
+    return response
+};

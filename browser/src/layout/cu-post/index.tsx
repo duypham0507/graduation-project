@@ -94,7 +94,7 @@ export const CUPostsComponent = () => {
 
   const isValidate = () => {
     let validate = true
-    if (title == undefined) {
+    if (title == undefined || title == '') {
       setErrorTitle('Tiêu đề hiện đang để trống')
       validate = false
     }
@@ -102,7 +102,7 @@ export const CUPostsComponent = () => {
       setErrorTag('Danh muc hiện đang để trống')
       validate = false
     }
-    if(tag && tag?.length > 3){
+    if (tag && tag?.length > 3) {
       setErrorTag('Số danh muc hiện đang nhiều hơn 3')
       validate = false
     }
@@ -118,10 +118,10 @@ export const CUPostsComponent = () => {
       <div className="z-50">
         <HeaderLayout />
       </div>
-      <div className="pt-4 px-4 flex flex-col w-full h-full mb-16 overflow-auto items-center flex-grow-limit scrollbar">
+      <div className="pt-4 px-4 flex flex-col w-full h-full mb-4 overflow-auto items-center scrollbar">
         <div className="flex flex-col w-2/3 h-full">
-          <div className="flex flex-row w-full justify-center">
-            <div className="w-[260px] h-[150px] border-[1px] flex-none relative">
+          <div className="flex flex-row w-full justify-start">
+            {/* <div className="w-[260px] h-[150px] border-[1px] flex-none relative">
               <input type="file" id="file" onChange={handleChange} className="hidden" />
               <label htmlFor="file">
                 <div className="absolute inset-0 flex flex-row items-center justify-center">
@@ -129,8 +129,8 @@ export const CUPostsComponent = () => {
                 </div>
                 <img src={avatar!} alt="" className="w-[260px] h-[150px] flex-none" />
               </label>
-            </div>
-            <div className="flex flex-col w-full ml-4">
+            </div> */}
+            <div className="flex flex-col w-2/3">
               <div className="flex flex-col mb-4">
                 <div className="w-full h-10 flex flex-row items-center">
                   <span className="w-[100px]">Tiêu đề: </span>
@@ -142,10 +142,10 @@ export const CUPostsComponent = () => {
                     required
                   />
                 </div>
-                {errorTitle && <FormErrorWrapper className="!mt-[-3px]" errorMessage={errorTitle} />}
+                {(!title || title == '') && <FormErrorWrapper className="!mt-[-3px]" errorMessage={errorTitle} />}
               </div>
               <div className="flex flex-col mb-4">
-                <div className="w-full h-10 flex flex-row items-center">
+                <div className="w-full flex flex-row items-center">
                   <span className="w-[100px]">Gắn thẻ: </span>
                   <Select
                     mode="multiple"
@@ -153,7 +153,7 @@ export const CUPostsComponent = () => {
                     style={{ width: "100%" }}
                     placeholder="Gắn thẻ bài viết của bạn. Tối đa 3 thẻ. Ít nhất 1 thẻ!"
                     onChange={(value) => {
-                      tag && tag?.length <= 3 && setErrorTag(undefined)
+                      tag && tag?.length < 4 && setErrorTag(undefined)
                       setTag(value)
                     }}
                     value={tag}
@@ -161,23 +161,22 @@ export const CUPostsComponent = () => {
                     {listTag.length > 0 && listTag.map((item) => <Option key={item.id_tag} value={item.id_tag}>{item.tag_name}</Option>)}
                   </Select>
                 </div>
-                {errorTag && <FormErrorWrapper className="!mt-[-3px]" errorMessage={errorTag} />}
+                {(!tag || tag?.length == 0 || tag?.length > 3) && <FormErrorWrapper className="!mt-0" errorMessage={errorTag} />}
               </div>
             </div>
           </div>
-          <div className="w-full h-10 my-4 flex flex-col items-start">
+          <div className="w-full my-4 flex flex-col items-start">
             <span className="w-[100px]">Nội dung: </span>
-            {errorContent && <FormErrorWrapper  className="!mb-[2px]" errorMessage={errorContent} />}
-            <div className="flex flex-row h-full">
+            <span className="text-sm">*<i>Lưu ý: Hình ảnh đầu tiên trong phần này sẽ được đặt làm ảnh đại diện cho bài viết của bạn</i></span>
+            {(!content || content == '') && <FormErrorWrapper className="!mb-[2px]" errorMessage={errorContent} />}
+            <div className="flex flex-row h-full mt-1">
               <Editor data={content!} setData={handleUpdateContent} />
             </div>
           </div>
-        </div>
-      </div>
-      <div className="w-full h-[60px] absolute bottom-0 right-0 p-4 border-t">
-        <div className="flex flex-row items-center justify-end">
-          <button className="mr-2" onClick={() => history.push("/home")}>Hủy</button>
-          <Button className="!border-blue-400 !text-blue-400 hover:bg-blue-500 hover:!text-white" onClick={handleUploadPost} loading={isLoading}>Xuất bản</Button>
+          <div className="flex flex-row items-center justify-end w-full h-auto">
+            <button className="mr-2" onClick={() => history.push("/home")}>Hủy</button>
+            <Button className="!border-blue-400 !text-blue-400 hover:bg-blue-500 hover:!text-white" onClick={handleUploadPost} loading={isLoading}>Xuất bản</Button>
+          </div>
         </div>
       </div>
     </div>

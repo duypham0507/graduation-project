@@ -9,6 +9,7 @@ import { LoginWithFacebookButton } from "./components/login-facebook";
 import { SocialLogin, loginSocial } from "services/auth";
 import { AUTH_METHOD } from "enums/index";
 import { useDispatch } from "react-redux";
+import { getUserInfo } from "services/user";
 const antIcon = <LoadingOutlined style={{ fontSize: 28 }} spin />;
 export const LoginComponent = () => {
   let history = useHistory();
@@ -16,7 +17,7 @@ export const LoginComponent = () => {
   const dispatch = useDispatch();
 
   const loginWithGoogle = async (token: string) => {
-    console.log(token);
+    setLoading(true)
     let param: SocialLogin = {
       accessToken: token,
       method: AUTH_METHOD.GOOGLE
@@ -25,6 +26,7 @@ export const LoginComponent = () => {
       let res = await dispatch(loginSocial(param) as any);
       console.log(res);
       res.type === "login-social/fulfilled" && history.push('/home')
+      await getUserInfo()
       setLoading(false)
     } catch (error) {
       console.log(error)
@@ -34,7 +36,6 @@ export const LoginComponent = () => {
 
   const loginWithFacebook = async (resFB) => {
     setLoading(true)
-    console.log(resFB);
     let param: SocialLogin = {
       accessToken: resFB.accessToken,
       method: AUTH_METHOD.FB
@@ -43,6 +44,7 @@ export const LoginComponent = () => {
       let res = await dispatch(loginSocial(param) as any);
       console.log(res);
       res.type === "login-social/fulfilled" && history.push('/home')
+      await getUserInfo()
       setLoading(false)
     } catch (error) {
       console.log(error)

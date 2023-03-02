@@ -12,9 +12,8 @@ interface IProps {
 
 export const NewPostsCtn = (props: IProps) => {
   const history = useHistory();
-  const [current, setCurrent] = useState()
-  const [minIndex, setMinIndex] = useState<number>(0)
-  const [maxIndex, setMaxIndex] = useState<number>(0)
+  const [current, setCurrent] = useState(0);
+  const [metadata, setMetadata] = useState<any>(null);
   const [listPost, setListPost] = useState<any>([])
   const [isLoading, setLoading] = useState(false);
   const location = useLocation<{ keyword: any }>();
@@ -23,50 +22,46 @@ export const NewPostsCtn = (props: IProps) => {
     const init = async () => {
       setLoading(true)
       let param: any = {};
-      param.limit = 6;
+      param.limit = pageSize;
+      param.offset =  current! * pageSize;
       param.orderBy = 'CREATE_AT'
       await getPost(param).then(rs => {
         setListPost(rs.data.data);
-        setMinIndex(0)
-        setMaxIndex(pageSize)
+        setMetadata(rs.data.metadata);
       }).catch((error) => console.log(error))
       setLoading(false)
     };
     init()
-  }, [location.state?.keyword!])
+  }, [location.state?.keyword!, current])
 
   useEffect(() => {
     const init = async () => {
-      if (location.state?.keyword! == undefined) return
+      setLoading(true)
+      if (location.state?.keyword! == undefined || location.state?.keyword! == '') return
+      setCurrent(0)
       let param: any = {};
+      param.limit = pageSize;
+      param.offset =  current! * pageSize;
       param.search = location.state?.keyword!
       await getPostFilter(param).then(rs => {
         setListPost(rs.data.data.data);
+        setMetadata(rs.data.data.metadata);
       })
+      setLoading(false)
     };
     init()
-  }, [location.state?.keyword!])
+  }, [location.state?.keyword!, current])
 
   const viewPost = (slug, id) => {
-    history.push('/posts/' + slug, {  // location state
-      postsId: id,
-    })
+    history.push('/posts/' + id + '-' + slug)
   }
-
-  const changePage = (page) => {
-    setCurrent(page)
-    setMinIndex((page - 1) * pageSize)
-    setMaxIndex(page * pageSize);
-  }
-  console.log('123', listPost);
 
   return (
     <div className="mt-2 w-full flex flex-col">
       <h1 className="m-0 p-0 text-3xl font-bold pb-3 border-b">Bài viết mới nhất</h1>
       <div className="p-0 mx-0 my-5 w-full min-h-20">
         <Spin spinning={isLoading} indicator={antIcon}>
-          {listPost.map((item, index) => index >= minIndex &&
-            index < maxIndex && (
+          {listPost.map((item, index) => (
               <div key={index} className="border-b px-0 py-4">
                 <h3 className="text-xl mt-0 mb-3 cursor-pointer hover:text-blue-600 font-semibold" onClick={() => viewPost(item.slug, item.id_post)}>
                   {item.title}
@@ -97,9 +92,12 @@ export const NewPostsCtn = (props: IProps) => {
       <div className="w-full flex flex-row justify-center items-center">
         <Pagination
           pageSize={pageSize}
-          current={current}
-          total={listPost.length}
-          onChange={changePage} />
+          current={metadata?.page!}
+          total={metadata?.total!}
+          onChange={(page, pageSize) => {
+            setCurrent(page - 1);
+          }}
+        />
       </div>
     </div>
   );

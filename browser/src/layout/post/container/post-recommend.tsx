@@ -2,13 +2,17 @@ import { EyeOutlined } from "@ant-design/icons"
 import { useEffect, useState } from "react";
 import { getPostFilter } from "services/post";
 import moment from "moment";
+import { useHistory } from "react-router-dom";
 
 interface IProps {
     tags?: any;
     authorId?: string;
+    id_post?: number;
+    callBack: () => void
 }
 
-export const RecommendPostCtn = ({ tags, authorId }: IProps) => {
+export const RecommendPostCtn = ({ tags, id_post, authorId, callBack }: IProps) => {
+    const history = useHistory();
     const [listPost, setListPost] = useState<Array<any>>()
     useEffect(() => {
         console.log(tags);
@@ -29,7 +33,13 @@ export const RecommendPostCtn = ({ tags, authorId }: IProps) => {
             <h3 className="text-xl font-bold">Đề xuất cho bạn</h3>
         </div>
         <div className="w-full m-0 p-0 mt-2">
-            {listPost?.map((item, i) => <div key={i} className="mb-5 pb-5 ml-0 border-b flex flex-row items-center justify-start relative">
+            {listPost?.filter(x => x.id_post != id_post).map((item, i) => 
+            <div key={i} 
+            onClick={() => {
+                callBack!()
+                history.push('/posts/' + item.id_post + '-' + item.slug)
+              }} 
+                className="mb-5 pb-5 ml-0 border-b flex flex-row items-center justify-start relative cursor-pointer">
                 <div className="mr-5 w-[250px] h-[90px]">
                     <img src={item.thumbnail ? item.thumbnail : "/assets/images/img/header-img.jpg"} alt="" className="w-[250px] h-[100px]" />
                 </div>

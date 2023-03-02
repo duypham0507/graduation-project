@@ -18,6 +18,7 @@ export const CreateNewPasswordComponent = () => {
     const [aceptPassword, setAceptPassword] = useState("");
     const [errorNewPassword, setErrorNewPassword] = useState<any>();
     const [errorAceptPassword, setErrorAceptPassword] = useState<any>();
+    const [errorResponsive, setErrorResponsive] = useState<any>();
 
     useEffect(() => {
         const initGapi = () => {
@@ -40,6 +41,8 @@ export const CreateNewPasswordComponent = () => {
         let res: any = await createNewPassword(payload)
         if (res.status === 200) {
             history.push('/update-password-success')
+        } else{
+            setErrorResponsive(res.payload.response.data.message)
         }
         setLoading(false)
     };
@@ -69,6 +72,7 @@ export const CreateNewPasswordComponent = () => {
         <div className="w-full flex h-full flex-col scrollable-view">
             <div className="w-full flex h-full flex-row justify-center my-6 items-center">
                 <Spin spinning={isLoading} indicator={antIcon}>
+                    {errorResponsive && <FormErrorWrapper errorMessage={errorResponsive} className=""/>}
                     <div className="sm:shadow-lg shadow-none bg-white border border-solid sm:rounded-md rounded-none sm:w-[448px] w-full mx-4 p-0 sm:p-6">
                         <div className="flex flex-col items-center mb-4">
                             <span className="text-2xl text-center font-medium text-baseBlack-100">
@@ -80,7 +84,7 @@ export const CreateNewPasswordComponent = () => {
                             <div className="h-[48px] bg-transparent border rounded-lg mb-2">
                                 <input
                                     className="w-full px-4 h-full block border-0 bg-transparent text-black outline-none rounded-lg"
-                                    type="text"
+                                    type="password"
                                     placeholder="Mật khẩu mới"
                                     value={newPassword}
                                     onChange={(event) => setNewPassword(event.target.value)}
@@ -92,7 +96,7 @@ export const CreateNewPasswordComponent = () => {
                             <div className="h-[48px] bg-transparent border rounded-lg mb-2">
                                 <input
                                     className="w-full px-4 h-full block border-0 bg-transparent text-black outline-none rounded-lg"
-                                    type="text"
+                                    type="password"
                                     placeholder="Xác nhận lại"
                                     value={aceptPassword}
                                     onChange={(event) => setAceptPassword(event.target.value)}

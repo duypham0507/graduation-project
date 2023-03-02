@@ -17,7 +17,8 @@ export const NewPostsCtn = (props: IProps) => {
   useEffect(() => {
     const init = async () => {
       let param: any = {};
-      param.limit = 6
+      param.limit = 6;
+      param.offset = 0;
       await getPost(param).then(rs => {
         setListPost(rs.data.data);
       }).catch((error) => console.log(error))
@@ -31,7 +32,7 @@ export const NewPostsCtn = (props: IProps) => {
         <h2 className="font-bold not-italic pb-3 text-xl">Bài viết gần đây</h2>
       </div>
       <div className="w-full flex-grow-limit flex flex-row flex-wrap">
-        {listPost?.map((item, i) => <div key={i} className="mb-5 pb-5 ml-0 border-b flex flex-row items-center justify-start relative">
+        {listPost?.map((item, i) => <div key={i} onClick={() => history.push('/posts/' + item.id_post + '-' + item.slug)} className="mb-5 pb-5 ml-0 border-b flex flex-row items-center justify-start relative">
           <div className="mr-5 w-[250px] h-[90px]">
             <img src={item.thumbnail ? item.thumbnail : "/assets/images/img/header-img.jpg"} alt="" className="w-[250px] h-[100px]" />
           </div>

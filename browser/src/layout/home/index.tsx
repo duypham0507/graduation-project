@@ -1,7 +1,6 @@
 import { HeaderLayout } from "header/header-layout";
 import { Link, NavLink, Route, Switch, useHistory } from "react-router-dom";
 import { FooterCtn } from "./container/footer";
-import { MenuTopCtn } from "./container/menu-top";
 import { NewPostsCtn } from "./container/new-post";
 import { TopViewCtn } from "./container/top-view";
 import { useEffect, useState } from "react";
@@ -13,6 +12,7 @@ import { TopLikeCtn } from "./container/top-like";
 import { EditOutlined } from "@ant-design/icons";
 import { ListBookmarkCtn } from "./container/list-bookmark";
 import { ListBloggerCtn } from "./container/list-blogger";
+import classNames from 'classnames';
 
 const navigate_homepage = [
   {
@@ -22,6 +22,14 @@ const navigate_homepage = [
   {
     path: "/home/blogger",
     label: "Bloger"
+  },
+  {
+    path: "/home/trending",
+    label: "Xu hướng"
+  },
+  {
+    path: "/home/group",
+    label: "Hội nhóm"
   },
   {
     path: "/home/bookmark",
@@ -67,7 +75,7 @@ export const HomeComponent = () => {
               <div className="flex flex-row justify-between items-center w-full">
                 <nav className="flex flex-row flex-nowrap items-center">
                   {navigate_homepage.map((item) => 
-                    <NavLink  to={item.path} onClick={() => setPathNav(item.path)} className="mx-5 font-semibold hover:text-blue-600 cursor-pointer" activeStyle={{color: pathNav == item.path ? "blue" : ""}}>{item.label}</NavLink >
+                    <NavLink  to={item.path} onClick={() => setPathNav(item.path)} className={classNames("mx-5 font-semibold hover:text-blue-600 cursor-pointer", {"hidden" : !profile && item.path == "/home/bookmark"})} activeStyle={{color: pathNav == item.path ? "blue" : ""}}>{item.label}</NavLink >
                   )}
                 </nav>
                 {profile && <button onClick={() => history.push("/create-posts")} className="mr-20 bg-blue-500 hover:bg-blue-600 px-2 rounded text-white">

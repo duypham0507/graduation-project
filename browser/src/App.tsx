@@ -34,7 +34,7 @@ function App() {
         <Route path={"/update-posts/:postId"} exact>
           <CUPostsComponent />
         </Route>
-        <Route path={"/posts/:slug"}>
+        <Route path={"/posts/:postId-:slug"}>
           <PostsComponent />
         </Route>
         <Route path={"/"} exact>

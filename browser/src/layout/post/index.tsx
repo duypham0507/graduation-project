@@ -7,7 +7,7 @@ import { ICreatePostPayload, IPostPayload, getPostDetail, updateReaction } from 
 import parse from "html-react-parser";
 import moment from "moment";
 import { PostFilterCtn } from "./container/post-filter";
-import { BookOutlined, ExclamationCircleFilled, EyeOutlined, FlagFilled, HeartOutlined, LikeOutlined } from "@ant-design/icons";
+import { BookOutlined, ExclamationCircleFilled, EyeOutlined, FacebookFilled, FlagFilled, HeartOutlined, InstagramFilled, LikeOutlined, ShareAltOutlined, TwitterOutlined, YoutubeFilled } from "@ant-design/icons";
 import { PostAuthorCtn } from "./container/post-author";
 import { RecommendPostCtn } from "./container/post-recommend";
 import { Avatar, Card, Skeleton, Modal } from 'antd';
@@ -15,6 +15,7 @@ import BackToTopButton from "components/BackToTopButton";
 import { CommentCtn } from "./container/comment";
 import { ACCESS_TOKEN } from "constants/index";
 import { parseJwt } from "utils/index";
+import { getBookmarByCur, toggleBookmark } from '../../services/bookmark';
 
 const { Meta } = Card;
 const { warning } = Modal;
@@ -23,11 +24,13 @@ export const PostsComponent = () => {
   const [loading, setLoading] = useState(false);
   const [showButton, setShowButton] = useState(false);
   const [postsInfo, setPostsInfo] = useState<IPostPayload>();
-  const location = useLocation<{ postsId: string }>();
+  // const location = useLocation<{ postId: string }>();
+  const param = useParams<{ postId: string, slug: string }>();
   const content = document.getElementById('content-post')
   const [profile, setProfile] = useState<any>();
+  const [isBookmarByCur, setIsBookmarByCur] = useState(false);
+  console.log(param);
   
-
   useEffect(() => {
     const accessToken = localStorage.getItem(ACCESS_TOKEN);
     if (accessToken) {
@@ -35,13 +38,24 @@ export const PostsComponent = () => {
     }
   }, []);
   useEffect(() => {
-    init();
-  }, [location.state.postsId])
+    getPostInfo();
+  }, [param.postId])
 
-  const init = async () => {
-    if (!location.state.postsId) return;
+  useEffect(() => {
+    statusBookMark()
+  }, [param.postId])
+
+  const statusBookMark = async () => {
+    if (!param.postId) return;
+    await getBookmarByCur(param.postId).then(rs => {
+      rs.status === 200 ? setIsBookmarByCur(true) : setIsBookmarByCur(false)
+    });   
+  }
+
+  const getPostInfo = async () => {
+    if (!param.postId) return;
     // setLoading(true)
-    let res = await getPostDetail(location.state.postsId);
+    let res = await getPostDetail(param.postId);
     res.status === 200 && setPostsInfo(res.data.data);
     // setLoading(false)
   };
@@ -82,7 +96,19 @@ export const PostsComponent = () => {
       return
     }
     await updateReaction(param)
-    init()
+    getPostInfo()
+  }
+
+  const handleBookmark = async () => {
+    if(!profile){
+      showWarning()
+      return
+    }
+    let param:any = {
+      id_post: postsInfo?.id_post,
+    }
+    await toggleBookmark(param);
+    statusBookMark()
   }
 
   const showWarning = () => {
@@ -98,13 +124,19 @@ export const PostsComponent = () => {
   };
 
   const description = () => <div className="flex flex-col h-full">
-    <span className="text-base text-gray-300">{postsInfo?.userinfo?.email!}</span>
+    <span className="text-base text-gray-400">{postsInfo?.userinfo?.email!}</span>
     <div className="flex flex-row items-center mt-4">
-      <span className="mr-4 text-gray-400 cursor-pointer">
-        <EyeOutlined /> 500
+      <span className="cursor-pointer mx-2">
+        <FacebookFilled style={{ fontSize: "150%" }}/>
       </span>
-      <span className="text-gray-400 cursor-pointer">
-        <LikeOutlined /> 100
+      <span className="cursor-pointer mx-2">
+        <YoutubeFilled style={{ fontSize: "150%" }}/>
+      </span>
+      <span className="cursor-pointer mx-2">
+        <TwitterOutlined style={{ fontSize: "150%" }}/>
+      </span>
+      <span className="cursor-pointer mx-2">
+        <InstagramFilled style={{ fontSize: "150%" }}/>
       </span>
     </div>
   </div>
@@ -168,7 +200,8 @@ export const PostsComponent = () => {
                   </div>
                   <div className="flex flex-row justify-center mt-2 border-t border-b py-2">
                     <button onClick={actionReaction} className="font-semibold text-gray-600 hover:text-blue-700 mx-2"><LikeOutlined />{" "}{isLiked ? "Đã thích" : "Thích"}</button>
-                    <button className="font-semibold text-gray-600 mx-2"><BookOutlined />{" "}Lưu bài viết</button>
+                    <button onClick={handleBookmark} className="font-semibold text-gray-600 mx-2"><BookOutlined />{" "}{isBookmarByCur ? 'Đã lưu' : 'Lưu bài viết'}</button>
+                    <button className="font-semibold text-gray-600 mx-2"><ShareAltOutlined />{" "}Chia sẻ</button>
                     <button className="font-semibold text-gray-600 mx-2"><FlagFilled />{" "}Báo cáo</button>
                   </div>
                 </Skeleton>
@@ -187,7 +220,7 @@ export const PostsComponent = () => {
                 </Card>}
                 <div className="">
                   <Skeleton loading={loading} active avatar className="h-[500px]">
-                    <RecommendPostCtn tags={postsInfo?.tags![0].id} authorId={postsInfo?.userinfo?.id.toString()}/>
+                    <RecommendPostCtn tags={postsInfo?.tags![0].id} id_post={postsInfo?.id_post} authorId={postsInfo?.userinfo?.id.toString()} callBack={backToTop}/>
                   </Skeleton>
                 </div>
               </div>
@@ -196,11 +229,11 @@ export const PostsComponent = () => {
         </div>
         <div className="mx-auto py-2 w-4/5 h-auto">
           <div className="">
-            <PostAuthorCtn author_id={postsInfo?.author_id} callBack={backToTop}/>
+            <PostAuthorCtn author_id={postsInfo?.author_id} id_post={postsInfo?.id_post} callBack={backToTop}/>
           </div>
         </div>
         <div className="mx-auto py-2 w-4/5 h-auto">
-          <CommentCtn post_id={location.state.postsId} author_id={postsInfo?.author_id?.toString()}/>
+          <CommentCtn post_id={param.postId} author_id={postsInfo?.author_id?.toString()}/>
         </div>
         <div className="w-full h-[300px]">
           <FooterCtn />
