@@ -1,5 +1,5 @@
 import { Button, Input, Select, message } from "antd";
-import { HeaderLayout } from "header/header-layout";
+import { HeaderLayout } from "components/header/header-layout";
 import Editor from "components/editor";
 import { useCallback, useState, useEffect } from 'react';
 import { createPost, getPostDetail, updatePost } from "services/post";
@@ -45,7 +45,7 @@ export const CUPostsComponent = () => {
       if (res.status === 200) {
         setContent(res.data.data?.content)
         setTitle(res.data.data?.title)
-        setTag(res.data.data?.tags.map(i => i.id))
+        setTag(res.data.data?.tags.map(i => i.id_tag))
       };
     };
     init();
@@ -169,7 +169,7 @@ export const CUPostsComponent = () => {
             <span className="w-[100px]">Nội dung: </span>
             <span className="text-sm">*<i>Lưu ý: Hình ảnh đầu tiên trong phần này sẽ được đặt làm ảnh đại diện cho bài viết của bạn</i></span>
             {(!content || content == '') && <FormErrorWrapper className="!mb-[2px]" errorMessage={errorContent} />}
-            <div className="flex flex-row h-full mt-1">
+            <div className="flex flex-row h-full w-full mt-1">
               <Editor data={content!} setData={handleUpdateContent} />
             </div>
           </div>

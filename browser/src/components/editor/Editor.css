@@ -1,6 +1,7 @@
 .ck-content {
   min-height: 300px;
   max-height: 1000px;
+  width: 100%;
 }
 
 .ck-content::-webkit-scrollbar {

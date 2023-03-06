@@ -1,4 +1,4 @@
-import { HeaderLayout } from 'header/header-layout';
+import { HeaderLayout } from 'components/header/header-layout';
 import { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import { verifyEmail } from 'services/verify';

@@ -21,7 +21,7 @@ export const TopViewCtn = () => {
     <div className="">
       <div className="mx-0 my-2">
         <div className="min-h-[200px]">
-          {listPost &&  listPost.map((item, index) => (
+          {listPost && listPost.filter((el, i) => i < 10).map((item, index) => (
             <div key={item.id_post} className="px-4 py-5 font-semibold flex flex-row items-center mb-[-1px] cursor-pointer" onClick={() => history.push('/posts/' + item.id_post + '-' + item.slug)}>
               <span className="float-left flex-none ml-1 p-2 text-[20px] font-bold bg-transparent text-blue-500">
                 {index + 1 + "."}

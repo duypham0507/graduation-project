@@ -33,7 +33,7 @@ export const RecommendPostCtn = ({ tags, id_post, authorId, callBack }: IProps) 
             <h3 className="text-xl font-bold">Đề xuất cho bạn</h3>
         </div>
         <div className="w-full m-0 p-0 mt-2">
-            {listPost?.filter(x => x.id_post != id_post).map((item, i) => 
+            {listPost?.filter((el, i) => el.id_post != id_post && i < 10).map((item, i) => 
             <div key={i} 
             onClick={() => {
                 callBack!()

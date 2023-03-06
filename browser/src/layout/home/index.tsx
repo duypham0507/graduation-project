@@ -1,6 +1,5 @@
-import { HeaderLayout } from "header/header-layout";
+import { HeaderLayout } from "components/header/header-layout";
 import { Link, NavLink, Route, Switch, useHistory } from "react-router-dom";
-import { FooterCtn } from "./container/footer";
 import { NewPostsCtn } from "./container/new-post";
 import { TopViewCtn } from "./container/top-view";
 import { useEffect, useState } from "react";
@@ -8,11 +7,11 @@ import { getPost } from "services/post";
 import { Carousel, Tabs } from "antd";
 import { ACCESS_TOKEN } from "constants/index";
 import { parseJwt } from "utils/index";
-import { TopLikeCtn } from "./container/top-like";
 import { EditOutlined } from "@ant-design/icons";
 import { ListBookmarkCtn } from "./container/list-bookmark";
 import { ListBloggerCtn } from "./container/list-blogger";
 import classNames from 'classnames';
+import { FooterCtn } from "components/footer";
 
 const navigate_homepage = [
   {
@@ -107,11 +106,8 @@ export const HomeComponent = () => {
               </div>
               <div className="mr-0 ml-2 w-1/3">
                 <Tabs className="">
-                  <Tabs.TabPane key="1" tab={<h1 className="m-0 p-0 text-2xl font-bold text-black hover:text-green-500">Xem nhiều</h1>}>
+                  <Tabs.TabPane key="1" tab={<h1 className="m-0 p-0 text-2xl font-bold text-black">Top thịnh hành</h1>}>
                     <TopViewCtn />
-                  </Tabs.TabPane>
-                  <Tabs.TabPane key="2" tab={<h1 className="m-0 p-0 text-2xl font-bold text-black hover:text-green-500">Yêu thích</h1>}>
-                    <TopLikeCtn />
                   </Tabs.TabPane>
                 </Tabs>
               </div>

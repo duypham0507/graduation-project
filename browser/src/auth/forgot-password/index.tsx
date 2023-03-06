@@ -2,7 +2,7 @@ import { LoadingOutlined } from "@ant-design/icons";
 import { Button, Spin, message } from "antd"
 import { FormErrorWrapper } from "components/form-error/form-error-wrapper";
 import { EMAIL_VALID } from "constants/index";
-import { HeaderAuthen } from "header/header-authen"
+import { HeaderAuthen } from "components/header/header-authen"
 import { useState } from "react";
 import { useHistory } from "react-router-dom";
 import { forgotPassword } from "services/auth";

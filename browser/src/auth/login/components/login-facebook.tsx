@@ -17,12 +17,9 @@ function LoginWithFacebookButton(props: IProps) {
             autoLoad={false}
             fields="name,email,picture"
             onSuccess={(res) => {
-                // console.log('loginfacebook', res)
                 props.onCallBack(res)
             }}
             className={`w-full ${props.className}`}
-            // onClick={componentClicked}
-            // callback={responseFacebook} 
         >
             {props.children ?
                 props.children

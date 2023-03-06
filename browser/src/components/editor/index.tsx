@@ -1,6 +1,6 @@
 import React from "react";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
-const CKEditorCustomBuild = require("../../ckeditor5");
+// const CKEditorCustomBuild = require("../../ckeditor5");
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import "./Editor.css";
 import { CustomUploadAdapter } from "./imageUploadAdapter";
@@ -16,7 +16,7 @@ const Editor = ({ data, setData }: IEditor) => {
   return (
     <div className="w-full h-full">
       <CKEditor
-        editor={CKEditorCustomBuild}
+        editor={ClassicEditor}
         data={data}
         config={{
           image: {

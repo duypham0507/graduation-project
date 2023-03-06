@@ -1,4 +1,4 @@
-import { HeaderAuthen } from "header/header-authen";
+import { HeaderAuthen } from "components/header/header-authen";
 import { useHistory } from "react-router-dom";
 import { FormSignUp } from "./signup-form";
 import { useState } from "react";

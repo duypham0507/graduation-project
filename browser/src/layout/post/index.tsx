@@ -1,5 +1,4 @@
-import { HeaderLayout } from "header/header-layout";
-import { FooterCtn } from "layout/home/container/footer";
+import { HeaderLayout } from "components/header/header-layout";
 import { TopViewCtn } from "layout/home/container/top-view";
 import { useHistory, useLocation, useParams } from "react-router-dom";
 import { useEffect, useMemo, useState } from "react";
@@ -7,15 +6,16 @@ import { ICreatePostPayload, IPostPayload, getPostDetail, updateReaction } from 
 import parse from "html-react-parser";
 import moment from "moment";
 import { PostFilterCtn } from "./container/post-filter";
-import { BookOutlined, ExclamationCircleFilled, EyeOutlined, FacebookFilled, FlagFilled, HeartOutlined, InstagramFilled, LikeOutlined, ShareAltOutlined, TwitterOutlined, YoutubeFilled } from "@ant-design/icons";
+import { BookFilled, BookOutlined, ExclamationCircleFilled, EyeOutlined, FacebookFilled, FlagFilled, HeartOutlined, InstagramFilled, LikeFilled, LikeOutlined, ShareAltOutlined, TwitterOutlined, YoutubeFilled } from "@ant-design/icons";
 import { PostAuthorCtn } from "./container/post-author";
 import { RecommendPostCtn } from "./container/post-recommend";
-import { Avatar, Card, Skeleton, Modal } from 'antd';
+import { Avatar, Card, Skeleton, Modal, message } from 'antd';
 import BackToTopButton from "components/BackToTopButton";
 import { CommentCtn } from "./container/comment";
 import { ACCESS_TOKEN } from "constants/index";
 import { parseJwt } from "utils/index";
 import { getBookmarByCur, toggleBookmark } from '../../services/bookmark';
+import { FooterCtn } from "components/footer";
 
 const { Meta } = Card;
 const { warning } = Modal;
@@ -26,7 +26,7 @@ export const PostsComponent = () => {
   const [postsInfo, setPostsInfo] = useState<IPostPayload>();
   // const location = useLocation<{ postId: string }>();
   const param = useParams<{ postId: string, slug: string }>();
-  const content = document.getElementById('content-post')
+  const content = document.getElementById('content-post');
   const [profile, setProfile] = useState<any>();
   const [isBookmarByCur, setIsBookmarByCur] = useState(false);
   console.log(param);
@@ -39,18 +39,18 @@ export const PostsComponent = () => {
   }, []);
   useEffect(() => {
     getPostInfo();
-  }, [param.postId])
+  }, [param.postId]);
 
   useEffect(() => {
-    statusBookMark()
-  }, [param.postId])
+    statusBookMark();
+  }, [param.postId]);
 
   const statusBookMark = async () => {
     if (!param.postId) return;
     await getBookmarByCur(param.postId).then(rs => {
-      rs.status === 200 ? setIsBookmarByCur(true) : setIsBookmarByCur(false)
+      rs.status === 200 ? setIsBookmarByCur(true) : setIsBookmarByCur(false);
     });   
-  }
+  };
 
   const getPostInfo = async () => {
     if (!param.postId) return;
@@ -62,7 +62,7 @@ export const PostsComponent = () => {
 
   useEffect(() => {
     const onScroll = () => {
-      content?.scrollTop! >= 500 ? setShowButton(true) : setShowButton(false)
+      content?.scrollTop! >= 500 ? setShowButton(true) : setShowButton(false);
     };
     content?.addEventListener('scroll', onScroll, { passive: true });
     return () => content?.removeEventListener('scroll', onScroll);
@@ -77,39 +77,39 @@ export const PostsComponent = () => {
   };
   
   const isLiked = useMemo(() => {
-    let checkLike = postsInfo?.reactionlists?.some(x => x.id_user == profile?.id!)
+    let checkLike = postsInfo?.reactionlists?.some(x => x.id_user == profile?.id!);
     if(checkLike && postsInfo?.reactionlists?.length! > 0){
-      return true
+      return true;
     } else {
-      return false
+      return false;
     }
-  }, [postsInfo])
+  }, [postsInfo]);
 
   const actionReaction = async () => {
     let param:any = {
       id_post: postsInfo?.id_post,
       reaction_type: "LIKE",
       status: isLiked ? "0" : "1"
-    }
+    };
     if(!profile){
-      showWarning()
-      return
+      showWarning();
+      return;
     }
-    await updateReaction(param)
-    getPostInfo()
-  }
+    await updateReaction(param);
+    getPostInfo();
+  };
 
   const handleBookmark = async () => {
     if(!profile){
-      showWarning()
-      return
+      showWarning();
+      return;
     }
     let param:any = {
       id_post: postsInfo?.id_post,
-    }
+    };
     await toggleBookmark(param);
-    statusBookMark()
-  }
+    statusBookMark();
+  };
 
   const showWarning = () => {
     warning({
@@ -121,6 +121,16 @@ export const PostsComponent = () => {
         console.log('OK');
       },
     });
+  };
+
+  const handleCopyLink = () => {
+    navigator.clipboard.writeText("http://localhost:3000/posts/" + postsInfo?.id_post + "-" + postsInfo?.slug)
+      .then(() => {
+        message.success("Sao chép link thành công");
+      })
+      .catch(() => {
+        message.error("Sao chép link thành công");
+      });
   };
 
   const description = () => <div className="flex flex-col h-full">
@@ -139,7 +149,7 @@ export const PostsComponent = () => {
         <InstagramFilled style={{ fontSize: "150%" }}/>
       </span>
     </div>
-  </div>
+  </div>;
   return (
     <div className="w-full h-full flex flex-col">
       <div className="z-50 w-full bg-white">
@@ -199,9 +209,9 @@ export const PostsComponent = () => {
                     ))}
                   </div>
                   <div className="flex flex-row justify-center mt-2 border-t border-b py-2">
-                    <button onClick={actionReaction} className="font-semibold text-gray-600 hover:text-blue-700 mx-2"><LikeOutlined />{" "}{isLiked ? "Đã thích" : "Thích"}</button>
-                    <button onClick={handleBookmark} className="font-semibold text-gray-600 mx-2"><BookOutlined />{" "}{isBookmarByCur ? 'Đã lưu' : 'Lưu bài viết'}</button>
-                    <button className="font-semibold text-gray-600 mx-2"><ShareAltOutlined />{" "}Chia sẻ</button>
+                    <button onClick={actionReaction} className="font-semibold text-blue-700 mx-2">{isLiked ? <LikeFilled/> : <LikeOutlined />}{" "}{isLiked ? "Đã thích" : "Thích"}</button>
+                    <button onClick={handleBookmark} className="font-semibold text-gray-600 mx-2">{isBookmarByCur ? <BookFilled/> : <BookOutlined />}{" "}{isBookmarByCur ? 'Đã lưu' : 'Lưu bài viết'}</button>
+                    <button onClick={handleCopyLink} className="font-semibold text-gray-600 mx-2"><ShareAltOutlined />{" "}Chia sẻ</button>
                     <button className="font-semibold text-gray-600 mx-2"><FlagFilled />{" "}Báo cáo</button>
                   </div>
                 </Skeleton>
@@ -232,7 +242,7 @@ export const PostsComponent = () => {
             <PostAuthorCtn author_id={postsInfo?.author_id} id_post={postsInfo?.id_post} callBack={backToTop}/>
           </div>
         </div>
-        <div className="mx-auto py-2 w-4/5 h-auto">
+        <div className="mx-auto py-2 w-4/5 h-auto mt-2">
           <CommentCtn post_id={param.postId} author_id={postsInfo?.author_id?.toString()}/>
         </div>
         <div className="w-full h-[300px]">

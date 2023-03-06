@@ -1,7 +1,7 @@
 import { LoadingOutlined } from "@ant-design/icons";
 import { Button, Spin } from "antd"
 import { FormErrorWrapper } from "components/form-error/form-error-wrapper";
-import { HeaderAuthen } from "header/header-authen"
+import { HeaderAuthen } from "components/header/header-authen"
 import { useState, useEffect } from 'react';
 import { useHistory, useParams } from "react-router-dom";
 import { createNewPassword } from "services/auth";

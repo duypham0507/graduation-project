@@ -2,7 +2,7 @@ import { Tabs } from "antd";
 import { ProfileScreen } from "./container/profile";
 import { ListPostScreen } from "./container/list-post";
 import { ListTagScreen } from "./container/list-tag";
-import { HeaderLayout } from "header/header-layout";
+import { HeaderLayout } from "components/header/header-layout";
 
 export const AccountComponent = () => {
   return (

@@ -25,10 +25,10 @@ const static_menu_class_action = [
 export const ListPostScreen = () => {
   const history = useHistory();
   const [listPost, setListPost] = useState<any>([])
-  const menuActionRender = (action: (type) => void) => {
+  const menuActionRender = (action: (type) => void, status) => {
     return <div className={`w-auto shadow-lg flex flex-col bg-white mr-1`}>
       {static_menu_class_action.map((item, index) => {
-        return <button className='flex w-full justify-end py-2 px-2 hover:bg-gray-300'
+        return <button className={classNames('flex w-full justify-end py-2 px-2 hover:bg-gray-300', { 'hidden' : index < 2 && status != "APPROVED"})}
           key={index}
           onClick={(e) => {
             action(item.type)
@@ -114,7 +114,7 @@ export const ListPostScreen = () => {
   return (
     <div className="w-full h-full flex flex-col flex-grow-limit mt-2">
       <div className="flex flex-row justify-between items-center pl-4 pr-6">
-        <span className="text-xl text-baseGray-100 font-semibold">
+        <span className="text-xl font-semibold">
           Bài viết của tôi
         </span>
         <button onClick={() => history.push("/create-posts")} className="border flex flex-row px-4 py-2 items-center rounded-sm h-8 border-blue-500 text-blue-500 hover:text-white hover:bg-blue-500">
@@ -154,7 +154,7 @@ export const ListPostScreen = () => {
               e.stopPropagation()
             }}
           >
-            <Dropdown overlay={menuActionRender((actioneType) => handleAction(actioneType, item))} placement='bottomLeft' trigger={['hover']}>
+            <Dropdown overlay={menuActionRender((actioneType) => handleAction(actioneType, item), item.status)} placement='bottomLeft' trigger={['hover']}>
               <a onClick={(e) => {
                 e.preventDefault()
               }}
